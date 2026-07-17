@@ -337,6 +337,93 @@
   @media (max-width:1080px){
     .main{grid-template-columns:230px minmax(0,1fr) 300px;}
   }
+
+  /* ---------- Modo Dev / UX ---------- */
+  .mode-seg{margin:0 2px;}
+  .ux-bar{display:none;align-items:center;gap:12px;padding:9px 14px;background:var(--surface);
+    border-bottom:1px solid var(--border);flex-wrap:wrap;min-height:50px;}
+  .ux-tip{font-size:12px;color:var(--text-2);line-height:1.35;}
+  .ux-testing{font-size:12px;color:var(--accent-deep);font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+  .ux-play-ctrls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+  .ux-bar .seg button{display:inline-flex;align-items:center;gap:6px;}
+  /* Testar (play) — telefone interativo */
+  body.playing .tabs{display:none;}
+  body.playing .palette{opacity:.45;pointer-events:none;filter:grayscale(.3);}
+  body.playing .wa-back{cursor:pointer;}
+  body.playing #canvasRoot .cnode-tools{display:none;}
+  body.playing #canvasRoot .cnode{cursor:default;}
+  body.playing #canvasRoot .cnode>.cnode-inner{outline:none!important;}
+  body.playing #canvasRoot .cnode.play[data-playnav]{cursor:pointer;}
+  body.playing #canvasRoot .cnode.play[data-playnav]:hover .wa-cta{filter:brightness(1.08);}
+  body.playing #canvasRoot .cnode.play[data-playnav]:hover .wa-link{text-decoration:underline;}
+  body.playing #canvasRoot .cnode.play[data-playnav]:active{transform:translateY(1px);}
+  .play-done{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;text-align:center;padding:30px;}
+  .play-done .pd-ic{width:66px;height:66px;border-radius:50%;background:var(--wa-inp);color:var(--wa);
+    display:grid;place-items:center;margin-bottom:6px;}
+  .play-done b{font-size:18px;color:var(--wa-ink);}
+  .play-done span{font-size:13px;color:var(--wa-mut);max-width:230px;}
+  .play-done .btn{margin-top:12px;}
+  .insp-play{padding:20px 18px;}
+  .insp-play p{font-size:13px;color:var(--text-2);line-height:1.55;margin:0 0 14px;}
+
+  /* ---------- Testar: componentes dinâmicos ---------- */
+  .wa-inp-real{width:100%;background:var(--wa-inp);border:1.5px solid transparent;border-radius:10px;
+    padding:12px 13px;font-size:14px;color:var(--wa-ink);font-family:var(--font);outline:none;cursor:text;
+    transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;}
+  .wa-inp-real::placeholder{color:var(--wa-mut);}
+  .wa-inp-real:focus{border-color:var(--wa2);background:#fff;box-shadow:0 0 0 3px rgba(0,168,132,.14);}
+  .wa-inp-real:disabled{opacity:.55;cursor:not-allowed;}
+  textarea.wa-inp-real{min-height:76px;resize:vertical;line-height:1.45;}
+  select.wa-inp-real{cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:36px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23667781' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;}
+  input[type="date"].wa-inp-real{cursor:pointer;}
+  .row2g{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .wa-err{display:flex;align-items:center;gap:5px;color:#d92d20;font-size:11.5px;font-weight:600;margin-top:6px;}
+  .perr .wa-inp-real{border-color:#d92d20 !important;background:#fdecea;}
+  .perr{animation:pshake .38s cubic-bezier(.36,.07,.19,.97);}
+  @keyframes pshake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-3px)}40%,60%{transform:translateX(3px)}}
+  body.playing .wa-opt.tap{cursor:pointer;border-radius:9px;margin:0 -6px;padding:9px 8px;
+    transition:background .13s ease, transform .1s ease;}
+  body.playing .wa-opt.tap:hover{background:#f5f7f6;}
+  body.playing .wa-opt.tap:active{background:#edf1ef;transform:scale(.99);}
+  body.playing .box{display:grid;place-items:center;transition:background .16s ease, border-color .16s ease;}
+  .box .ck{color:#fff;display:grid;place-items:center;animation:ckpop .2s cubic-bezier(.5,1.7,.6,1);}
+  .box .dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:ckpop .2s cubic-bezier(.5,1.7,.6,1);}
+  @keyframes ckpop{from{transform:scale(0)}to{transform:scale(1)}}
+  body.playing .wa-cta{cursor:pointer;transition:transform .12s ease, filter .12s ease, box-shadow .12s ease;}
+  body.playing .wa-cta:hover{filter:brightness(1.06);box-shadow:0 5px 16px rgba(0,128,105,.34);}
+  body.playing .wa-cta:active{transform:scale(.97);}
+
+  /* ---------- Testar: animações de tela e entrada ---------- */
+  .play-wrap{display:flex;flex-direction:column;gap:12px;min-height:100%;}
+  .play-wrap .play-done{flex:1;height:auto;}
+  .play-wrap.anim.nav-fwd{animation:slideF .32s cubic-bezier(.22,.9,.36,1) both;}
+  .play-wrap.anim.nav-back{animation:slideB .32s cubic-bezier(.22,.9,.36,1) both;}
+  @keyframes slideF{from{opacity:0;transform:translateX(46px)}to{opacity:1;transform:none}}
+  @keyframes slideB{from{opacity:0;transform:translateX(-46px)}to{opacity:1;transform:none}}
+  .play-wrap.anim .cnode{animation:compIn .34s ease both;}
+  .play-wrap.anim .cnode:nth-child(1){animation-delay:.03s}
+  .play-wrap.anim .cnode:nth-child(2){animation-delay:.07s}
+  .play-wrap.anim .cnode:nth-child(3){animation-delay:.11s}
+  .play-wrap.anim .cnode:nth-child(4){animation-delay:.15s}
+  .play-wrap.anim .cnode:nth-child(5){animation-delay:.19s}
+  .play-wrap.anim .cnode:nth-child(6){animation-delay:.23s}
+  .play-wrap.anim .cnode:nth-child(7){animation-delay:.27s}
+  .play-wrap.anim .cnode:nth-child(8){animation-delay:.31s}
+  .play-wrap.anim .cnode:nth-child(9){animation-delay:.35s}
+  .play-wrap.anim .cnode:nth-child(n+10){animation-delay:.38s}
+  @keyframes compIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  .pop-in{animation:popIn .3s cubic-bezier(.5,1.5,.6,1);}
+  @keyframes popIn{0%{opacity:0;transform:scale(.94)}60%{transform:scale(1.015)}100%{opacity:1;transform:scale(1)}}
+  .play-done .pd-ic{animation:donePop .5s cubic-bezier(.55,1.6,.5,1) both;}
+  .play-done b,.play-done span,.play-done .btn{animation:compIn .4s .14s ease both;}
+  @keyframes donePop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  @media (prefers-reduced-motion: reduce){
+    .play-wrap.anim,.play-wrap.anim .cnode,.pop-in,.perr,.box .ck,.box .dot,
+    .play-done .pd-ic,.play-done b,.play-done span,.play-done .btn{animation:none !important;}
+  }
 </style>
 
 <div class="app">
@@ -344,6 +431,10 @@
     <div class="brand">
       <div class="brand-logo" id="brandLogo"></div>
       <div class="brand-txt"><b>Flow&nbsp;Studio</b><span>Construtor de WhatsApp Flows</span></div>
+    </div>
+    <div class="top-sep"></div>
+    <div class="seg mode-seg" title="Alternar entre visão de Desenvolvimento e de UX">
+      <button id="modeDev" class="on">Dev</button><button id="modeUx">UX</button>
     </div>
     <div class="top-sep"></div>
     <div class="ver-wrap" title="Versão do Flow JSON">
@@ -368,6 +459,7 @@
   <main class="main">
     <aside class="palette" id="palette"></aside>
     <section class="stage">
+      <div class="ux-bar" id="uxBar"></div>
       <div class="tabs" id="tabs"></div>
       <div class="canvas-scroll" id="canvasScroll">
         <div class="phone">
@@ -545,7 +637,7 @@ const COMPONENTS = {
   CalendarPicker:{label:'Calendário', icon:'calendar', cat:'input', desc:'Data única ou intervalo (v6.1+)',
     fields:[F_NAME,{key:'label',label:'Rótulo (label)',type:'text',req:true,max:40},
       {key:'mode',label:'Modo',type:'select',opts:['single','range'],def:'single'},
-      {key:'title',label:'Título',type:'text'},{key:'description',label:'Descrição',type:'text'},
+      {key:'title',label:'Título',type:'text',max:80},{key:'description',label:'Descrição',type:'text',max:300},
       F_HELP,{key:'min-date',label:'Data mínima (YYYY-MM-DD)',type:'text'},{key:'max-date',label:'Data máxima (YYYY-MM-DD)',type:'text'}, F_VIS],
     defaults:{name:'calendario', label:'Escolha a data', mode:'single', visible:true},
     preview:n=>'<label class="wa-label">'+esc(n.props.label||'Calendário')+'</label>'+
@@ -669,8 +761,20 @@ function buildSeed(){
   return { version:'7.0', screens:[s1,s2,s3] };
 }
 
-const state = { flow:buildSeed(), currentId:null, sel:{kind:'screen'} };
+const state = { flow:buildSeed(), currentId:null, sel:{kind:'screen'}, mode:'dev', play:false, navStack:[], done:false,
+  playData:{}, playErr:{}, navDir:'fwd', animScreen:false, playSig:'', justAdded:null };
 state.currentId = state.flow.screens[0]._id;
+
+/* ---------- Modo Dev / UX ---------- */
+// Campos "técnicos" ocultados no modo UX (edição simplificada).
+const UX_HIDE = new Set(['name','pattern','min-chars','max-chars','max-length',
+  'min-selected-items','max-selected-items','min-date','max-date','aspect-ratio','width','markdown']);
+const UX_ACTS = ['navigate','complete','open_url','none'];
+const UX_ACT_LABEL = {navigate:'Ir para outra tela', complete:'Finalizar o fluxo', open_url:'Abrir um link',
+  none:'Não fazer nada', data_exchange:'Enviar dados (avançado)', update_data:'Atualizar dados (avançado)'};
+function isUX(){ return state.mode==='ux'; }
+function isPlaying(){ return state.mode==='ux' && state.play; }
+function screenTitleById(id){ const s=state.flow.screens.find(x=>x.id===id); return s?(s.title||s.id):id; }
 
 function currentScreen(){ return state.flow.screens.find(s=>s._id===state.currentId) || state.flow.screens[0]; }
 function childArrays(node){
@@ -718,15 +822,18 @@ function toast(msg, kind){
   $('#toasts').appendChild(t); setTimeout(()=>{ t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 2000);
 }
 function renderPalette(){
-  const html = PALETTE.map(g=> '<div class="palette-hd">'+esc(g.group)+'</div>'+
+  const groups = isUX() ? PALETTE.filter(g=>g.group!=='Lógica & Navegação') : PALETTE;
+  const html = groups.map(g=> '<div class="palette-hd">'+esc(g.group)+'</div>'+
     g.items.map(t=>{ const d=COMPONENTS[t];
       return '<div class="pal-item" draggable="true" data-add="'+t+'" data-cat="'+d.cat+'">'+
         '<span class="pal-ico">'+icon(d.icon,17)+'</span>'+
         '<span class="pal-tx"><b>'+esc(d.label)+'</b><span>'+esc(d.desc)+'</span></span></div>';
     }).join('')
   ).join('');
-  $('#palette').innerHTML = html +
-    '<div class="pal-hint"><b>Dica:</b> arraste um componente para dentro do telefone ou clique para adicioná-lo ao fim da tela. <b>If</b> e <b>Switch</b> criam ramificações — coloque um <b>Rodapé</b> com ação <b>Navegar</b> dentro delas para transições condicionais entre telas.</div>';
+  const hint = isUX()
+    ? '<div class="pal-hint"><b>Como usar:</b> clique num item para adicioná-lo à tela (ou arraste para posicioná-lo). Depois clique no item dentro do celular para editar o conteúdo. Para ligar uma tela a outra, use um <b>Rodapé (botão)</b> e escolha “Ir para outra tela”. Depois toque em <b>Testar</b> para simular a navegação.</div>'
+    : '<div class="pal-hint"><b>Dica:</b> arraste um componente para dentro do telefone ou clique para adicioná-lo ao fim da tela. <b>If</b> e <b>Switch</b> criam ramificações — coloque um <b>Rodapé</b> com ação <b>Navegar</b> dentro delas para transições condicionais entre telas.</div>';
+  $('#palette').innerHTML = html + hint;
 }
 function renderTabs(){
   const html = state.flow.screens.map((s,i)=>{
@@ -742,11 +849,12 @@ function renderContainer(arr, key, root){
 }
 function renderNode(node){
   const def=COMPONENTS[node.type]; if(!def) return '';
-  const sel = state.sel.kind==='component' && state.sel.id===node._id;
-  const tools = '<div class="cnode-tools">'+
+  const playing=isPlaying();
+  const sel = !playing && state.sel.kind==='component' && state.sel.id===node._id;
+  const tools = playing ? '' : ('<div class="cnode-tools">'+
     '<button class="grip" data-grip title="Mover">'+icon('grip',14)+'</button>'+
     '<button data-dup="'+node._id+'" title="Duplicar">'+icon('copy',13)+'</button>'+
-    '<button class="del" data-del="'+node._id+'" title="Excluir">'+icon('trash',13)+'</button></div>';
+    '<button class="del" data-del="'+node._id+'" title="Excluir">'+icon('trash',13)+'</button></div>');
   let body;
   if(node.type==='If'){
     body='<div class="logic"><div class="logic-hd">'+icon('iff',14)+'SE <span class="cond">'+esc(node.props.condition||'condição')+'</span></div>'+
@@ -761,23 +869,222 @@ function renderNode(node){
   } else {
     body = def.preview(node);
   }
-  const style = node.props.visible===false ? ' style="opacity:.45"' : '';
-  return '<div class="cnode'+(sel?' sel':'')+'" data-node="'+node._id+'" draggable="true">'+tools+
+  if(playing){ const pv=playPreview(node); if(pv!=null) body=pv; }
+  let style='';
+  if(node.props.visible===false) style = playing ? ' style="display:none"' : ' style="opacity:.45"';
+  const drag = playing ? '' : ' draggable="true"';
+  const nav = (playing && (node.type==='Footer'||node.type==='EmbeddedLink') && hasPlayAction(node)) ? ' data-playnav="1"' : '';
+  const perr = (playing && state.playErr[node._id]) ? ' perr' : '';
+  const pop = (!playing && state.justAdded===node._id) ? ' pop-in' : '';
+  return '<div class="cnode'+(sel?' sel':'')+(playing?' play':'')+perr+pop+'" data-node="'+node._id+'"'+drag+nav+'>'+tools+
     '<div class="cnode-inner"'+style+'>'+body+'</div></div>';
 }
+function hasPlayAction(node){ const p=node.props||{};
+  return ['on-click-action','on-select-action'].some(k=>{ const a=p[k]; return a&&a.name&&a.name!=='none'; }); }
 function renderCanvas(){
   const sc=currentScreen(); if(!sc) return;
   $('#waTitle').textContent = sc.title||sc.id;
-  $('#waSub').textContent = sc.id + (sc.terminal?' · final':'');
+  $('#waSub').textContent = isUX() ? (sc.terminal?'tela final':'') : (sc.id + (sc.terminal?' · final':''));
   $('#waDots').innerHTML = sc.terminal ? '<span class="term-badge">'+icon('flag',10)+'FINAL</span>' : icon('dots',20);
   $('#waBack').innerHTML = icon('back',20);
-  $('#canvasRoot').innerHTML = renderContainer(sc.children,'s|'+sc._id,true);
+  const root=$('#canvasRoot');
+  if(isPlaying()){
+    const anim=state.animScreen; state.animScreen=false;
+    const dir=(state.navDir==='back')?' nav-back':' nav-fwd';
+    let inner;
+    if(state.done){
+      inner='<div class="play-done"><div class="pd-ic">'+icon('check',32)+'</div>'+
+        '<b>Fluxo concluído!</b><span>O usuário chegou ao fim do fluxo.</span>'+
+        '<button class="btn primary" data-restart>'+icon('redo',15)+'Reiniciar teste</button></div>';
+    } else {
+      const list=flattenPlay(sc.children);
+      state.playSig=list.map(n=>n._id).join(',');
+      inner=list.length ? list.map(renderNode).join('') : '<div class="dz-empty">Esta tela está vazia.</div>';
+    }
+    root.innerHTML='<div class="play-wrap'+(anim?(' anim'+dir):'')+'">'+inner+'</div>';
+    return;
+  }
+  root.innerHTML = renderContainer(sc.children,'s|'+sc._id,true);
+  state.justAdded=null;
 }
 function updateTopbar(){
   $('#btnUndo').disabled=!undoStack.length; $('#btnRedo').disabled=!redoStack.length;
   $('#verSel').value=state.flow.version;
 }
 function render(){ updateTopbar(); renderTabs(); renderCanvas(); renderInspector(); }
+
+/* ============================ MODO DEV / UX + TESTAR ============================ */
+function updateModeBtns(){ const d=$('#modeDev'), u=$('#modeUx');
+  if(d) d.classList.toggle('on',!isUX()); if(u) u.classList.toggle('on',isUX()); }
+function renderUxBar(){ const bar=$('#uxBar'); if(!bar) return;
+  if(!isUX()){ bar.style.display='none'; bar.innerHTML=''; return; }
+  bar.style.display='flex';
+  bar.innerHTML='<div class="seg"><button id="uxEdit" class="'+(!state.play?'on':'')+'">'+icon('body',14)+'Editar</button>'+
+    '<button id="uxPlay" class="'+(state.play?'on':'')+'">'+icon('flag',14)+'Testar</button></div>'+
+    (state.play
+      ? '<div class="ux-play-ctrls"><button class="btn sm" id="uxBack"'+(!state.navStack.length?' disabled':'')+'>'+icon('back',13)+'Voltar</button>'+
+        '<button class="btn sm" id="uxRestart">'+icon('redo',13)+'Reiniciar</button>'+
+        '<span class="ux-testing">'+icon('flag',13)+'Modo teste — preencha os campos, selecione opções e toque nos botões para navegar</span></div>'
+      : '<span class="ux-tip"><b>Editar:</b> clique num item da esquerda para adicioná-lo e clique dentro do celular para editar. Use <b>Testar</b> para simular a navegação como o usuário.</span>');
+  const ed=$('#uxEdit'), pl=$('#uxPlay'); if(ed) ed.onclick=()=>setPlay(false); if(pl) pl.onclick=()=>setPlay(true);
+  const bk=$('#uxBack'); if(bk) bk.onclick=playBack; const rs=$('#uxRestart'); if(rs) rs.onclick=playRestart;
+}
+function setMode(m){ if(m!=='ux'&&m!=='dev') return; state.mode=m; if(m!=='ux') state.play=false;
+  state.sel={kind:'screen'}; try{ localStorage.setItem('flowstudio_mode',m); }catch(e){}
+  document.body.classList.toggle('mode-ux',isUX());
+  document.body.classList.toggle('playing',isPlaying());
+  updateModeBtns(); renderUxBar(); renderPalette(); render(); }
+function setPlay(p){ if(!isUX()) return; state.play=!!p;
+  if(state.play){ state.navStack=[]; state.done=false; state.playData={}; state.playErr={};
+    state.navDir='fwd'; state.animScreen=true; state.currentId=state.flow.screens[0]._id; state.sel={kind:'screen'}; }
+  document.body.classList.toggle('playing',isPlaying()); renderUxBar(); render(); }
+function playRestart(){ state.navStack=[]; state.done=false; state.playData={}; state.playErr={};
+  state.navDir='fwd'; state.animScreen=true; state.currentId=state.flow.screens[0]._id; renderUxBar(); render(); }
+function playBack(){ if(!state.navStack.length) return; state.currentId=state.navStack.pop(); state.done=false;
+  state.playErr={}; state.navDir='back'; state.animScreen=true; renderUxBar(); render(); }
+
+/* ---- Simulação dinâmica: respostas do usuário, condições e campos interativos ---- */
+function buildFormMap(){ const m={};
+  state.flow.screens.forEach(s=>walk(s.children,n=>{ if(n.props&&n.props.name&&(n._id in state.playData)) m[n.props.name]=state.playData[n._id]; }));
+  return m; }
+// Avalia uma condição do If com os valores preenchidos no teste. true/false, ou null se não avaliável.
+function playEvalCondition(cond){
+  if(!cond) return null;
+  const form=buildFormMap(); let bad=false;
+  const expr=String(cond).replace(/\$\{\s*(form|data|screen)\.([A-Za-z0-9_.\-]+)\s*\}/g,(m,scope,key)=>{
+    const v=(scope==='form')?form[key]:undefined;
+    if(v===undefined) return 'undefined';
+    try{ return JSON.stringify(v); }catch(e){ bad=true; return 'undefined'; } });
+  if(bad||/\$\{/.test(expr)) return null;
+  const stripped=expr.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g,'').replace(/\b(?:true|false|null|undefined)\b/g,'');
+  if(!/^[\s0-9+\-*\/%()!<>=&|.,\[\]]*$/.test(stripped)) return null;
+  try{ return !!(new Function('return ('+expr+');'))(); }catch(e){ return null; }
+}
+function resolvePlayValue(tpl){
+  if(tpl==null) return '';
+  const form=buildFormMap();
+  return String(tpl).replace(/\$\{\s*(form|data|screen)\.([A-Za-z0-9_.\-]+)\s*\}/g,(m,scope,key)=>{
+    const v=(scope==='form')?form[key]:undefined; return v==null?'':String(v); }).trim();
+}
+// Ramificações If/Switch reagem às respostas do teste; sem valor avaliável, caem no "então"/1º caso.
+function flattenPlay(nodes){ const out=[];
+  for(const n of (nodes||[])){
+    if(n.type==='If'){ const r=playEvalCondition(n.props&&n.props.condition);
+      out.push(...flattenPlay(r===false?(n.else||[]):(n.then||[]))); }
+    else if(n.type==='Switch'){ const v=resolvePlayValue(n.props&&n.props.value);
+      const keys=Object.keys(n.cases||{}); const k=keys.includes(v)?v:keys[0];
+      out.push(...flattenPlay((k!==undefined&&n.cases[k])||[])); }
+    else out.push(n);
+  } return out; }
+function playSigNow(){ return flattenPlay(currentScreen().children).map(n=>n._id).join(','); }
+function validatePlayScreen(){
+  const errs={};
+  for(const n of flattenPlay(currentScreen().children)){
+    const p=n.props||{}; if(p.visible===false) continue;
+    const v=state.playData[n._id];
+    if(n.type==='TextInput'||n.type==='TextArea'){
+      const s=(v==null?'':String(v)).trim();
+      if(p.required&&!s){ errs[n._id]='Campo obrigatório'; continue; }
+      const mn=+p['min-chars'];
+      if(n.type==='TextInput'&&mn>0&&s&&s.length<mn) errs[n._id]='Mínimo de '+mn+' caracteres';
+      if(n.type==='TextInput'&&p['input-type']==='email'&&s&&!/^\S+@\S+\.\S+$/.test(s)) errs[n._id]='E-mail inválido';
+    } else if(n.type==='Dropdown'||n.type==='RadioButtonsGroup'){
+      if(p.required&&!v) errs[n._id]='Escolha uma opção';
+    } else if(n.type==='CheckboxGroup'&&p.required){
+      const min=Math.max(1,+p['min-selected-items']||1);
+      if(!Array.isArray(v)||v.length<min) errs[n._id]=(min>1?'Escolha ao menos '+min+' opções':'Escolha ao menos uma opção');
+    } else if(n.type==='OptIn'&&p.required&&!v) errs[n._id]='É preciso aceitar para continuar';
+  }
+  return errs;
+}
+// Preview interativo dos componentes no modo Testar (null = mantém o preview estático).
+function playPreview(node){
+  const p=node.props||{}, nid=node._id, err=state.playErr[nid];
+  const lab='<label class="wa-label">'+esc(p.label||'')+(p.required?' *':'')+'</label>';
+  const help=p['helper-text']?'<div class="wa-help">'+esc(p['helper-text'])+'</div>':'';
+  const errH=err?'<div class="wa-err">'+icon('warn',12)+esc(err)+'</div>':'';
+  const dis=p.enabled===false?' disabled':'';
+  if(node.type==='TextInput'){
+    const t={text:'text',number:'number',email:'email',password:'password',passcode:'password',phone:'tel'}[p['input-type']]||'text';
+    const ph=({email:'exemplo@email.com',phone:'+55 (11) 90000-0000',number:'0',password:'••••••••',passcode:'0000'})[p['input-type']]||'Digite aqui…';
+    const v=state.playData[nid]!=null?state.playData[nid]:'';
+    return lab+'<input class="wa-inp-real" data-pinput="'+nid+'" type="'+t+'" maxlength="'+(+p['max-chars']||80)+'" placeholder="'+esc(ph)+'" value="'+esc(v)+'">'+help+errH;
+  }
+  if(node.type==='TextArea'){
+    const v=state.playData[nid]!=null?state.playData[nid]:'';
+    return lab+'<textarea class="wa-inp-real area" data-pinput="'+nid+'" maxlength="'+(+p['max-length']||600)+'" placeholder="Escreva sua mensagem…"'+dis+'>'+esc(v)+'</textarea>'+help+errH;
+  }
+  if(node.type==='DatePicker'){
+    const v=state.playData[nid]||''; const dv=x=>/^\d{4}-\d{2}-\d{2}$/.test(x||'');
+    return lab+'<input type="date" class="wa-inp-real" data-pinput="'+nid+'"'+(dv(p['min-date'])?' min="'+p['min-date']+'"':'')+(dv(p['max-date'])?' max="'+p['max-date']+'"':'')+dis+' value="'+esc(v)+'">'+help+errH;
+  }
+  if(node.type==='CalendarPicker'){
+    const v=state.playData[nid]||{};
+    if(p.mode==='range') return lab+'<div class="row2g"><input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="start" value="'+esc(v.start||'')+'"><input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="end" value="'+esc(v.end||'')+'"></div>'+help+errH;
+    return lab+'<input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="start" value="'+esc(v.start||'')+'">'+help+errH;
+  }
+  if(node.type==='Dropdown'){
+    const v=state.playData[nid]||''; const ds=p['data-source']||[];
+    return lab+'<select class="wa-inp-real" data-pselect="'+nid+'"'+dis+'><option value="">Selecione…</option>'+
+      ds.map(o=>'<option value="'+esc(o.id)+'"'+(v===o.id?' selected':'')+(o.enabled===false?' disabled':'')+'>'+esc(o.title||'')+'</option>').join('')+'</select>'+errH;
+  }
+  if(node.type==='CheckboxGroup'||node.type==='RadioButtonsGroup'){
+    const radio=node.type==='RadioButtonsGroup'; const ds=p['data-source']||[]; const val=state.playData[nid];
+    const rows=ds.map(o=>{ const on=radio?val===o.id:(Array.isArray(val)&&val.includes(o.id));
+      return '<div class="wa-opt tap" data-'+(radio?'pradio':'pcheck')+'="'+nid+'" data-opt="'+esc(o.id)+'">'+
+        '<span class="box '+(radio?'round ':'')+(on?'on':'')+'">'+(on?(radio?'<span class="dot"></span>':'<span class="ck">'+icon('check',12)+'</span>'):'')+'</span>'+
+        '<span class="t"><b>'+esc(o.title||'')+'</b>'+(o.description?'<span>'+esc(o.description)+'</span>':'')+'</span></div>'; }).join('');
+    return lab+(p.description?'<div class="wa-cap" style="margin:-2px 0 4px">'+esc(p.description)+'</div>':'')+'<div class="wa-optlist">'+rows+'</div>'+errH;
+  }
+  if(node.type==='OptIn'){
+    const on=!!state.playData[nid]; const a=p['on-click-action'];
+    return '<div class="wa-opt tap" data-poptin="'+nid+'" style="padding-left:2px"><span class="box '+(on?'on':'')+'">'+(on?'<span class="ck">'+icon('check',12)+'</span>':'')+'</span>'+
+      '<span class="t"><b style="font-weight:400">'+esc(p.label||'')+(p.required?' *':'')+'</b>'+
+      (a&&a.name&&a.name!=='none'?'<span class="wa-link" data-playact style="font-size:12.5px;margin-top:2px">Saiba mais</span>':'')+'</span></div>'+errH;
+  }
+  if(node.type==='Footer'){
+    const cap=p['center-caption']||((p['left-caption']||p['right-caption'])?((p['left-caption']||'')+' · '+(p['right-caption']||'')):'');
+    return (cap?'<div class="wa-cap" style="text-align:center;margin-bottom:8px">'+esc(cap)+'</div>':'')+
+      '<div class="wa-cta">'+esc(p.label||'Continuar')+'</div>';
+  }
+  if(node.type==='EmbeddedLink') return '<span class="wa-link">'+icon('link',15)+esc(p.text||'Link')+'</span>';
+  return null;
+}
+function handlePlayClick(e){
+  if(e.target.closest('[data-restart]')){ playRestart(); return; }
+  const t=e.target;
+  if(t.closest('input,select,textarea')) return; // controles nativos cuidam de si
+  const pa=t.closest('[data-playact]');
+  if(pa){ const nd=pa.closest('[data-node]'); const node=nd&&findNode(nd.dataset.node);
+    const a=node&&node.props['on-click-action']; if(a&&a.name&&a.name!=='none') doPlayAction(a); return; }
+  const ck=t.closest('[data-pcheck]');
+  if(ck){ const nid=ck.dataset.pcheck, oid=ck.dataset.opt; const node=findNode(nid); const p=(node&&node.props)||{};
+    let arr=Array.isArray(state.playData[nid])?state.playData[nid].slice():[];
+    if(arr.includes(oid)) arr=arr.filter(x=>x!==oid);
+    else{ const mx=+p['max-selected-items']; if(mx>0&&arr.length>=mx){ toast('Máximo de '+mx+' opções','warn'); return; } arr.push(oid); }
+    state.playData[nid]=arr; delete state.playErr[nid]; renderCanvas(); return; }
+  const rd=t.closest('[data-pradio]');
+  if(rd){ state.playData[rd.dataset.pradio]=rd.dataset.opt; delete state.playErr[rd.dataset.pradio]; renderCanvas(); return; }
+  const op=t.closest('[data-poptin]');
+  if(op){ const nid=op.dataset.poptin; state.playData[nid]=!state.playData[nid]; delete state.playErr[nid]; renderCanvas(); return; }
+  const nd=t.closest('[data-playnav]'); if(!nd) return;
+  const node=findNode(nd.dataset.node); if(!node) return;
+  let a=node.props['on-click-action']; if(!a||!a.name||a.name==='none') a=node.props['on-select-action'];
+  if(!a||!a.name||a.name==='none') return;
+  if(node.type==='Footer'){ const errs=validatePlayScreen();
+    if(Object.keys(errs).length){ state.playErr=errs; renderCanvas();
+      const first=$('#canvasRoot .perr'); if(first&&typeof first.scrollIntoView==='function') first.scrollIntoView({behavior:'smooth',block:'center'});
+      toast('Preencha os campos destacados','warn'); return; } }
+  doPlayAction(a);
+}
+function doPlayAction(a){
+  if(a.name==='navigate'){ const s=state.flow.screens.find(x=>x.id===a.next);
+    if(s){ state.navStack.push(state.currentId); state.currentId=s._id; state.done=false; state.playErr={};
+      state.navDir='fwd'; state.animScreen=true; renderUxBar(); render(); }
+    else toast('Este botão ainda não tem uma tela de destino','warn'); }
+  else if(a.name==='complete'){ state.done=true; state.playErr={}; state.navDir='fwd'; state.animScreen=true; renderUxBar(); render(); }
+  else if(a.name==='open_url'){ toast('Abriria o link: '+(a.url||'(sem URL)')); }
+  else toast('Ação de dados — simulada no teste'); }
 
 /* ============================ INSPECTOR ============================ */
 function tgl(on){ return '<span class="tgl'+(on?' on':'')+'"></span>'; }
@@ -786,6 +1093,7 @@ function labelHtml(f){ return '<label>'+esc(f.label)+(f.req?' <span class="sub">
 function helpHtml(f){ return f.help?'<div style="font-size:11px;color:var(--text-3);margin-top:5px;line-height:1.4">'+esc(f.help)+'</div>':''; }
 
 function renderField(node,f){
+  if(isUX() && UX_HIDE.has(f.key)) return '';
   const v=node.props[f.key];
   if(f.type==='boolean'){
     const on = (v===undefined? !!f.def : !!v);
@@ -793,15 +1101,15 @@ function renderField(node,f){
       (f.help?'<span>'+esc(f.help)+'</span>':'')+'</div>'+tgl(on)+'</div>';
   }
   let inner='';
-  if(f.type==='text') inner='<input class="inp" data-f="'+f.key+'" value="'+esc(v||'')+'" placeholder="'+esc(f.placeholder||'')+'">'+counter(v,f.max);
-  else if(f.type==='textarea') inner='<textarea class="ta" data-f="'+f.key+'">'+esc(v||'')+'</textarea>'+counter(v,f.max);
+  if(f.type==='text') inner='<input class="inp" data-f="'+f.key+'"'+(f.max?' maxlength="'+f.max+'"':'')+' value="'+esc(v||'')+'" placeholder="'+esc(f.placeholder||'')+'">'+counter(v,f.max);
+  else if(f.type==='textarea') inner='<textarea class="ta" data-f="'+f.key+'"'+(f.max?' maxlength="'+f.max+'"':'')+'>'+esc(v||'')+'</textarea>'+counter(v,f.max);
   else if(f.type==='number') inner='<input type="number" class="inp" data-f="'+f.key+'" value="'+(v==null?'':esc(v))+'">';
   else if(f.type==='select'){ const cur=(v==null?f.def:v);
     inner='<select class="sel" data-f="'+f.key+'">'+f.opts.map(o=>'<option value="'+esc(o)+'"'+(cur===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>'; }
   else if(f.type==='lines') inner='<textarea class="ta" data-f="'+f.key+'" data-lines="1" style="min-height:110px">'+esc(Array.isArray(v)?v.join('\n'):(v||''))+'</textarea>';
   else if(f.type==='condition') inner=conditionEditor(v);
   else if(f.type==='options') inner=optionsEditor(node,f.key);
-  else if(f.type==='action') inner=actionEditor(node,f);
+  else if(f.type==='action') inner=isUX()?uxActionEditor(node,f):actionEditor(node,f);
   else if(f.type==='image') inner=imageEditor(node,f.key);
   return '<div class="fld">'+labelHtml(f)+inner+helpHtml(f)+'</div>';
 }
@@ -812,13 +1120,16 @@ function conditionEditor(v){
     '<div style="font-size:11px;color:var(--text-3);margin-top:6px;line-height:1.4">Use uma variável dinâmica e resolva em booleano. Ex.: <code>${form.aceite} == true</code></div>';
 }
 function optionsEditor(node,key){
-  const ds=node.props[key]||[];
+  const ds=node.props[key]||[]; const ux=isUX();
   const rows=ds.map((o,i)=>
     '<div class="opt-card"><div class="oc-hd"><span class="oi">'+(i+1)+'</span>'+
-      '<input class="inp" data-optf="title" data-optidx="'+i+'" value="'+esc(o.title||'')+'" placeholder="Título da opção">'+
+      '<input class="inp" data-optf="title" data-optidx="'+i+'" maxlength="30" value="'+esc(o.title||'')+'" placeholder="Título da opção">'+
       '<button class="x-btn" data-optdel="'+i+'">'+icon('trash',13)+'</button></div>'+
-      '<div class="grid"><div><span class="mini">id</span><input class="inp" data-optf="id" data-optidx="'+i+'" value="'+esc(o.id||'')+'"></div>'+
-      '<div><span class="mini">Descrição</span><input class="inp" data-optf="description" data-optidx="'+i+'" value="'+esc(o.description||'')+'"></div></div></div>'
+      (ux
+        ? '<div><span class="mini">Descrição (opcional)</span><input class="inp" data-optf="description" data-optidx="'+i+'" maxlength="300" value="'+esc(o.description||'')+'" placeholder="Texto de apoio"></div>'
+        : '<div class="grid"><div><span class="mini">id</span><input class="inp" data-optf="id" data-optidx="'+i+'" value="'+esc(o.id||'')+'"></div>'+
+          '<div><span class="mini">Descrição</span><input class="inp" data-optf="description" data-optidx="'+i+'" maxlength="300" value="'+esc(o.description||'')+'"></div></div>')
+      +'</div>'
   ).join('');
   return '<div data-optkey="'+esc(key)+'">'+rows+'<button class="add-btn" data-optadd>'+icon('plus',15)+'Adicionar opção</button></div>';
 }
@@ -846,6 +1157,26 @@ function actionEditor(node,f){
   }
   return h+'</div>';
 }
+// Editor de ação simplificado (modo UX): sem payload, telas por título, rótulos amigáveis.
+function uxActionEditor(node,f){
+  const allowed=f.allowed||['navigate','complete','open_url'];
+  let a=node.props[f.key]; if(!a||!a.name) a={name:allowed[0], payload:[]};
+  const opts=UX_ACTS.filter(x=>allowed.includes(x)); if(!opts.includes(a.name)) opts.push(a.name);
+  const title = f.key==='on-select-action' ? 'Ao escolher uma opção' : 'Ao tocar neste item';
+  let h='<div class="opt-card" data-actkey="'+esc(f.key)+'">'+
+    '<span class="mini">'+title+'</span><select class="sel" data-act="name">'+
+    opts.map(x=>'<option value="'+x+'"'+(a.name===x?' selected':'')+'>'+esc(UX_ACT_LABEL[x]||ACT_LABEL[x]||x)+'</option>').join('')+'</select>';
+  if(a.name==='navigate'){
+    h+='<div style="margin-top:9px"><span class="mini">Tela de destino</span><select class="sel" data-act="next">'+
+      '<option value="">— escolha a tela —</option>'+
+      state.flow.screens.map(s=>'<option value="'+esc(s.id)+'"'+(a.next===s.id?' selected':'')+'>'+esc(s.title||s.id)+'</option>').join('')+
+      '</select></div>';
+  }
+  if(a.name==='open_url'){
+    h+='<div style="margin-top:9px"><span class="mini">Endereço (URL)</span><input class="inp" data-act="url" value="'+esc(a.url||'')+'" placeholder="https://…"></div>';
+  }
+  return h+'</div>';
+}
 function imageEditor(node,key){
   const v=node.props[key];
   return '<div data-imgkey="'+esc(key)+'">'+
@@ -866,8 +1197,9 @@ function inspScreen(sc){
   const idx=state.flow.screens.indexOf(sc);
   const outs=navSummary(sc);
   const navTargets=[...new Set(outs.filter(x=>x!=='__complete__'))];
+  const ux=isUX();
   let html='<div class="insp-hd"><div class="k">Tela '+(idx+1)+' de '+state.flow.screens.length+'</div>'+
-    '<div class="n"><span class="ci">'+icon('gear',17)+'</span><div><b>'+esc(sc.title||sc.id)+'</b><div class="type">'+esc(sc.id)+'</div></div></div>'+
+    '<div class="n"><span class="ci">'+icon('gear',17)+'</span><div><b>'+esc(sc.title||sc.id)+'</b><div class="type">'+esc(ux?('Tela '+(idx+1)):sc.id)+'</div></div></div>'+
     '<div class="tool-btns">'+
       '<button class="btn sm" data-scr-move="-1"'+(idx===0?' disabled':'')+' title="Mover para a esquerda">'+icon('back',13)+'</button>'+
       '<button class="btn sm" data-scr-dup>'+icon('copy',13)+'Duplicar</button>'+
@@ -875,16 +1207,16 @@ function inspScreen(sc){
       '<button class="btn sm" data-scr-del'+(state.flow.screens.length<=1?' disabled':'')+'>'+icon('trash',13)+'</button>'+
     '</div></div>';
   html+='<div class="insp-body">';
-  html+='<div class="fld"><label>ID da tela <span class="sub">· único, MAIÚSCULAS</span></label><input class="inp" data-sf="id" value="'+esc(sc.id)+'"></div>';
-  html+='<div class="fld"><label>Título (exibido no topo)</label><input class="inp" data-sf="title" value="'+esc(sc.title||'')+'"></div>';
-  html+='<div class="switch" data-toggle="screen|terminal"><div class="lb"><b>Tela final (terminal)</b><span>Última tela do fluxo — usa ação "complete"</span></div>'+tgl(sc.terminal)+'</div>';
-  html+='<div class="insp-sec"><div class="sec-t">Modelo de dados (data)</div>'+
+  html+='<div class="fld"><label>'+(ux?'Nome da tela':'Título (exibido no topo)')+'</label><input class="inp" data-sf="title" value="'+esc(sc.title||'')+'"></div>';
+  if(!ux) html+='<div class="fld"><label>ID da tela <span class="sub">· único, MAIÚSCULAS</span></label><input class="inp" data-sf="id" value="'+esc(sc.id)+'"></div>';
+  html+='<div class="switch" data-toggle="screen|terminal"><div class="lb"><b>'+(ux?'É a última tela?':'Tela final (terminal)')+'</b><span>'+(ux?'Finaliza o fluxo quando o usuário concluir':'Última tela do fluxo — usa ação "complete"')+'</span></div>'+tgl(sc.terminal)+'</div>';
+  if(!ux) html+='<div class="insp-sec"><div class="sec-t">Modelo de dados (data)</div>'+
     '<div style="font-size:11px;color:var(--text-3);margin:2px 0 7px;line-height:1.4">JSON opcional recebido do servidor. Ex.: <code>{"nome":{"type":"string","__example__":"Ana"}}</code></div>'+
     '<textarea class="ta mono" data-sf="data" placeholder="{}" style="min-height:90px">'+esc(sc.dataText||'')+'</textarea></div>';
-  html+='<div class="insp-sec"><div class="sec-t">Transições desta tela</div>';
-  if(navTargets.length) html+=navTargets.map(t=>'<div style="font-size:12.5px;color:var(--accent-deep);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:6px">'+icon('map',14)+'→ '+esc(t)+'</div>').join('');
+  html+='<div class="insp-sec"><div class="sec-t">'+(ux?'Para onde esta tela leva':'Transições desta tela')+'</div>';
+  if(navTargets.length) html+=navTargets.map(t=>'<div style="font-size:12.5px;color:var(--accent-deep);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:6px">'+icon('map',14)+'→ '+esc(ux?screenTitleById(t):t)+'</div>').join('');
   else if(outs.includes('__complete__')) html+='<div style="font-size:12.5px;color:#6d28d9;font-weight:600;margin-top:6px">✓ conclui o fluxo</div>';
-  else html+='<div style="font-size:12px;color:var(--text-3);margin-top:6px">Nenhuma. Adicione um Rodapé/Link com ação "Navegar".</div>';
+  else html+='<div style="font-size:12px;color:var(--text-3);margin-top:6px">'+(ux?'Nenhuma ainda. Adicione um Rodapé (botão) e escolha “Ir para outra tela”.':'Nenhuma. Adicione um Rodapé/Link com ação "Navegar".')+'</div>';
   html+='</div></div>';
   return html;
 }
@@ -902,14 +1234,27 @@ function inspComponent(node){
     '<div class="tool-btns"><button class="btn sm" data-dup="'+node._id+'">'+icon('copy',13)+'Duplicar</button>'+
     '<button class="btn sm" data-del="'+node._id+'">'+icon('trash',13)+'Excluir</button></div></div>';
   html+='<div class="insp-body">';
+  if(isUX() && (node.type==='If'||node.type==='Switch')){
+    html+='<div class="note">Este é um bloco <b>avançado</b> ('+(node.type==='If'?'condição':'seleção por valor')+'). Para editar a lógica de ramificação, use o modo <b>Dev</b>. Aqui você ainda pode excluí-lo pelo botão acima.</div>';
+    html+='</div>'; return html;
+  }
   for(const f of def.fields) html+=renderField(node,f);
-  if(node.type==='If') html+='<div class="note">As ramificações <b>então</b> e <b>senão</b> são editadas arrastando componentes para dentro delas no telefone. Para transições condicionais, coloque um <b>Rodapé</b> (ação Navegar) em cada ramo.</div>';
-  if(node.type==='Switch') html+=casesManager(node);
+  if(!isUX() && node.type==='If') html+='<div class="note">As ramificações <b>então</b> e <b>senão</b> são editadas arrastando componentes para dentro delas no telefone. Para transições condicionais, coloque um <b>Rodapé</b> (ação Navegar) em cada ramo.</div>';
+  if(!isUX() && node.type==='Switch') html+=casesManager(node);
   html+='</div>';
   return html;
 }
+function inspPlay(){
+  const sc=currentScreen();
+  return '<div class="insp-hd"><div class="k">Modo teste</div>'+
+    '<div class="n"><span class="ci">'+icon('flag',17)+'</span><div><b>Testando o fluxo</b><div class="type">'+esc(sc.title||sc.id)+'</div></div></div></div>'+
+    '<div class="insp-play"><p>Preencha os <b>campos</b>, selecione <b>opções</b> e toque nos <b>botões</b> para navegar entre as telas — como o usuário faria no WhatsApp. As respostas ficam guardadas até reiniciar, e ramificações (If/Switch) reagem ao que foi preenchido.</p>'+
+    '<div class="tool-btns"><button class="btn sm" data-back'+(!state.navStack.length?' disabled':'')+'>'+icon('back',13)+'Voltar</button>'+
+    '<button class="btn sm" data-restart>'+icon('redo',13)+'Reiniciar</button></div></div>';
+}
 function renderInspector(){
   const box=$('#inspector');
+  if(isPlaying()){ box.innerHTML=inspPlay(); return; }
   if(state.sel.kind==='component'){
     const node=findNode(state.sel.id);
     if(node){ box.innerHTML=inspComponent(node); return; }
@@ -1037,7 +1382,13 @@ function uniqueScreenId(base){ base=String(base||'TELA').toUpperCase().replace(/
   let id=base,n=2; while(state.flow.screens.some(s=>s.id===id)) id=base+'_'+(n++); return id; }
 function reid(n){ n._id=uid(); childArrays(n).forEach(a=>a.forEach(reid)); }
 function cloneFresh(n){ const c=clone(n); reid(c); return c; }
-function addComponent(type){ commit(()=>{ const n=makeNode(type); currentScreen().children.push(n); state.sel={kind:'component',id:n._id}; }); toast(COMPONENTS[type].label+' adicionado'); }
+// Garante um "name" único na tela atual (evita erro de nome duplicado ao adicionar).
+function ensureUniqueName(node){ if(!node||!node.props||!('name' in node.props)) return;
+  const names=new Set(); walk(currentScreen().children,n=>{ if(n!==node&&n.props&&n.props.name) names.add(n.props.name); });
+  let nm=node.props.name; if(nm&&!names.has(nm)) return;
+  const base=String(nm||node.type.toLowerCase()).replace(/_\d+$/,''); let i=2,c;
+  do{ c=base+'_'+(i++); }while(names.has(c)); node.props.name=c; }
+function addComponent(type){ commit(()=>{ const n=makeNode(type); ensureUniqueName(n); currentScreen().children.push(n); state.sel={kind:'component',id:n._id}; state.justAdded=n._id; }); toast(COMPONENTS[type].label+' adicionado'); }
 function addScreen(){ commit(()=>{ const id=uniqueScreenId('TELA'); const s={_id:uid(),id,title:'Nova tela',terminal:false,dataText:'',children:[]};
   state.flow.screens.push(s); state.currentId=s._id; state.sel={kind:'screen'}; }); toast('Tela adicionada'); }
 function deleteNode(id){ commit(()=>{ const r=findWithParent(id); if(r) r.arr.splice(r.index,1); if(state.sel.kind==='component'&&state.sel.id===id) state.sel={kind:'screen'}; }); }
@@ -1074,7 +1425,7 @@ function doDrop(){
   let index=0; for(const ch of dz.children){ if(ch===placeholderEl) break; if(ch.classList&&ch.classList.contains('cnode')&&ch!==draggedEl) index++; }
   const kind=dragKind, type=dragType, id=dragId;
   commit(()=>{
-    if(kind==='new'){ const n=makeNode(type); arr.splice(index,0,n); state.sel={kind:'component',id:n._id}; }
+    if(kind==='new'){ const n=makeNode(type); ensureUniqueName(n); arr.splice(index,0,n); state.sel={kind:'component',id:n._id}; state.justAdded=n._id; }
     else { const src=findWithParent(id); if(!src) return; const [node]=src.arr.splice(src.index,1); arr.splice(index,0,node); state.sel={kind:'component',id:node._id}; }
   });
   clearDnd();
@@ -1085,13 +1436,15 @@ function firstEditRecord(){ if(armed){ recordUndo(); armed=false; } }
 function setCompField(node,t){ const key=t.dataset.f;
   if(t.dataset.lines) node.props[key]=t.value.split('\n');
   else if(t.type==='number') node.props[key]=(t.value===''?'':Number(t.value));
-  else node.props[key]=t.value; }
+  else { let val=t.value; if(t.maxLength>0 && val.length>t.maxLength) val=val.slice(0,t.maxLength); node.props[key]=val; } }
 
 function initEvents(){
   $('#btnUndo').onclick=undo; $('#btnRedo').onclick=redo;
   $('#verSel').onchange=e=>commit(()=>state.flow.version=e.target.value);
   $('#btnExport').onclick=openExport; $('#btnImport').onclick=openImport;
   $('#btnValidate').onclick=openValidate; $('#btnMap').onclick=openMap; $('#btnTheme').onclick=toggleTheme;
+  $('#modeDev').onclick=()=>setMode('dev'); $('#modeUx').onclick=()=>setMode('ux');
+  $('#waBack').addEventListener('click',()=>{ if(isPlaying()) playBack(); });
   $('#backdrop').addEventListener('click',e=>{ if(e.target===$('#backdrop')) closeModal(); });
   $('#modal').addEventListener('click',e=>{ if(e.target.closest('[data-close]')) closeModal(); });
 
@@ -1107,18 +1460,30 @@ function initEvents(){
   // Canvas
   const root=$('#canvasRoot');
   root.addEventListener('click',e=>{
+    if(isPlaying()){ handlePlayClick(e); return; }
     const del=e.target.closest('[data-del]'); if(del){ e.stopPropagation(); deleteNode(del.dataset.del); return; }
     const dup=e.target.closest('[data-dup]'); if(dup){ e.stopPropagation(); duplicateNode(dup.dataset.dup); return; }
     if(e.target.closest('[data-grip]')) return;
     const nd=e.target.closest('[data-node]'); if(nd){ state.sel={kind:'component',id:nd.dataset.node}; renderCanvas(); renderInspector(); return; }
     state.sel={kind:'screen'}; renderCanvas(); renderInspector();
   });
-  root.addEventListener('dragstart',e=>{ const nd=e.target.closest('[data-node]'); if(!nd) return; e.stopPropagation();
+  root.addEventListener('dragstart',e=>{ if(isPlaying()){ e.preventDefault(); return; } const nd=e.target.closest('[data-node]'); if(!nd) return; e.stopPropagation();
     dragKind='move'; dragId=nd.dataset.node; dragType=null; draggedEl=nd; setTimeout(()=>nd.classList.add('dragging'),0);
     try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','move');}catch(_){} });
   root.addEventListener('dragend',()=>clearDnd());
   root.addEventListener('dragover',e=>{ if(!dragKind) return; e.preventDefault(); try{e.dataTransfer.dropEffect=dragKind==='new'?'copy':'move';}catch(_){} showPH(e); });
   root.addEventListener('drop',e=>{ if(!dragKind) return; e.preventDefault(); e.stopPropagation(); doDrop(); });
+
+  // Modo Testar: campos dinâmicos (digitação, seleção, reavaliação de ramificações)
+  root.addEventListener('input',e=>{ if(!isPlaying()) return; const el=e.target; const nid=el.dataset&&el.dataset.pinput; if(!nid) return;
+    if(el.dataset.pfield){ const o=Object.assign({},state.playData[nid]); o[el.dataset.pfield]=el.value; state.playData[nid]=o; }
+    else state.playData[nid]=el.value;
+    if(state.playErr[nid]){ delete state.playErr[nid]; const cn=el.closest('.cnode');
+      if(cn){ cn.classList.remove('perr'); const em=cn.querySelector('.wa-err'); if(em) em.remove(); } } });
+  root.addEventListener('change',e=>{ if(!isPlaying()) return; const el=e.target;
+    if(el.dataset&&el.dataset.pselect){ state.playData[el.dataset.pselect]=el.value; delete state.playErr[el.dataset.pselect]; renderCanvas(); } });
+  root.addEventListener('focusout',e=>{ if(!isPlaying()||state.done) return; const el=e.target;
+    if(el.dataset&&(el.dataset.pinput||el.dataset.pselect) && playSigNow()!==state.playSig) renderCanvas(); });
 
   // Inspector
   const insp=$('#inspector');
@@ -1126,7 +1491,7 @@ function initEvents(){
   insp.addEventListener('input',e=>{
     const t=e.target; const node=(state.sel.kind==='component')?findNode(state.sel.id):null;
     if(t.dataset.f!==undefined){ if(t.tagName==='SELECT') return; if(!node) return; firstEditRecord(); setCompField(node,t); renderCanvas(); saveLocal(); return; }
-    if(t.dataset.optf!==undefined && node){ firstEditRecord(); const key=t.closest('[data-optkey]').dataset.optkey; node.props[key][+t.dataset.optidx][t.dataset.optf]=t.value; renderCanvas(); saveLocal(); return; }
+    if(t.dataset.optf!==undefined && node){ firstEditRecord(); const key=t.closest('[data-optkey]').dataset.optkey; let val=t.value; if(t.maxLength>0 && val.length>t.maxLength) val=val.slice(0,t.maxLength); node.props[key][+t.dataset.optidx][t.dataset.optf]=val; renderCanvas(); saveLocal(); return; }
     if(t.dataset.payf!==undefined && node){ firstEditRecord(); const fk=t.closest('[data-actkey]').dataset.actkey; (node.props[fk].payload=node.props[fk].payload||[])[+t.dataset.payidx][t.dataset.payf]=t.value; saveLocal(); return; }
     if(t.dataset.act==='url' && node){ firstEditRecord(); node.props[t.closest('[data-actkey]').dataset.actkey].url=t.value; renderCanvas(); saveLocal(); return; }
     if(t.dataset.sf==='title'){ firstEditRecord(); currentScreen().title=t.value; renderTabs(); $('#waTitle').textContent=t.value||currentScreen().id; saveLocal(); return; }
@@ -1144,7 +1509,10 @@ function initEvents(){
     if(t.dataset.sf==='id'){ commit(()=>setScreenId(currentScreen(),t.value)); return; }
   });
   insp.addEventListener('click',e=>{
-    const t=e.target; const node=(state.sel.kind==='component')?findNode(state.sel.id):null;
+    const t=e.target;
+    if(t.closest('[data-restart]')){ playRestart(); return; }
+    if(t.closest('[data-back]')){ playBack(); return; }
+    const node=(state.sel.kind==='component')?findNode(state.sel.id):null;
     const del=t.closest('[data-del]'); if(del){ deleteNode(del.dataset.del); return; }
     const dup=t.closest('[data-dup]'); if(dup){ duplicateNode(dup.dataset.dup); return; }
     const ins=t.closest('[data-insert]'); if(ins){ insertCond(ins.dataset.insert); return; }
@@ -1261,7 +1629,11 @@ function toggleTheme(){ const root=document.documentElement; const cur=root.getA
   $('#icMap').innerHTML=icon('map',16); $('#icVal').innerHTML=icon('check',16);
   $('#icImp').innerHTML=icon('import',16); $('#icExp').innerHTML=icon('export',16); $('#btnTheme').innerHTML=icon('sun',18);
   try{ const th=localStorage.getItem('flowstudio_theme'); if(th) document.documentElement.setAttribute('data-theme',th); }catch(e){}
+  try{ const md=localStorage.getItem('flowstudio_mode'); if(md==='ux'||md==='dev') state.mode=md; }catch(e){}
   loadLocal();
+  document.body.classList.toggle('mode-ux',isUX());
+  document.body.classList.toggle('playing',isPlaying());
+  updateModeBtns(); renderUxBar();
   renderPalette(); render(); initEvents();
 })();
 </script>
