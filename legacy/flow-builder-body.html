@@ -1,11 +1,4 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Flow Studio — Construtor de WhatsApp Flows</title>
-</head>
-<body>
 <style>
   :root{
     --bg:#e9eeec; --surface:#ffffff; --surface-2:#f4f7f6; --surface-3:#eef2f0;
@@ -22,9 +15,14 @@
     --r-sm:7px; --r-md:11px; --r-lg:16px;
     --font:"Segoe UI Variable Display","Segoe UI",-apple-system,BlinkMacSystemFont,"Inter",system-ui,sans-serif;
     --mono:"Cascadia Code","SF Mono",ui-monospace,"Consolas","Menlo",monospace;
-    /* Cores fixas do "telefone" (independem do tema do app) */
-    --wa:#008069; --wa2:#00a884; --wa-body:#ffffff; --wa-chat:#efe7de;
-    --wa-ink:#111b21; --wa-mut:#667781; --wa-inp:#f0f2f5; --wa-line:#e9edef;
+    /* Cores do "telefone" (WhatsApp) — acompanham o tema do app. Tema CLARO: */
+    --wa:#008069; --wa2:#00a884; --wa-head:#008069;
+    --wa-body:#ffffff; --wa-chat:#efe7de;
+    --wa-ink:#111b21; --wa-ink2:#3b4a54; --wa-mut:#667781;
+    --wa-inp:#f0f2f5; --wa-inp-focus:#ffffff; --wa-line:#e9edef; --wa-box:#c4cdc8;
+    --wa-link:#027eb5; --wa-tap:#f5f7f6; --wa-tap-active:#edf1ef;
+    --wa-err:#d92d20; --wa-err-bg:#fdecea;
+    --wa-sheet:#ffffff; --wa-sheet-2:#f0f2f5; --wa-scrim:rgba(11,20,26,.42);
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -36,6 +34,14 @@
       --danger:#ff6b5e; --danger-soft:#2a1512; --warn:#e0a24a; --warn-soft:#2a2010; --ok:#38d39a;
       --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-md:0 6px 22px rgba(0,0,0,.5);
       --shadow-lg:0 30px 70px rgba(0,0,0,.65);
+      /* WhatsApp — tema ESCURO (segue o sistema) */
+      --wa:#00a884; --wa2:#00a884; --wa-head:#1f2c34;
+      --wa-body:#0b141a; --wa-chat:#0b141a;
+      --wa-ink:#e9edef; --wa-ink2:#c8d0d4; --wa-mut:#8696a0;
+      --wa-inp:#2a3942; --wa-inp-focus:#233138; --wa-line:#2b3940; --wa-box:#8696a0;
+      --wa-link:#53bdeb; --wa-tap:#182229; --wa-tap-active:#202c33;
+      --wa-err:#f2637a; --wa-err-bg:#3a1f22;
+      --wa-sheet:#233138; --wa-sheet-2:#1d282e; --wa-scrim:rgba(0,0,0,.6);
     }
   }
   :root[data-theme="light"]{
@@ -46,6 +52,12 @@
     --shadow-sm:0 1px 2px rgba(6,32,24,.06),0 1px 3px rgba(6,32,24,.05);
     --shadow-md:0 4px 16px rgba(6,32,24,.10),0 2px 6px rgba(6,32,24,.06);
     --shadow-lg:0 24px 60px rgba(6,32,24,.28);
+    /* WhatsApp CLARO forçado (mesmo sob sistema escuro) */
+    --wa:#008069; --wa2:#00a884; --wa-head:#008069; --wa-body:#ffffff; --wa-chat:#efe7de;
+    --wa-ink:#111b21; --wa-ink2:#3b4a54; --wa-mut:#667781;
+    --wa-inp:#f0f2f5; --wa-inp-focus:#ffffff; --wa-line:#e9edef; --wa-box:#c4cdc8;
+    --wa-link:#027eb5; --wa-tap:#f5f7f6; --wa-tap-active:#edf1ef; --wa-err:#d92d20; --wa-err-bg:#fdecea;
+    --wa-sheet:#ffffff; --wa-sheet-2:#f0f2f5; --wa-scrim:rgba(11,20,26,.42);
   }
   :root[data-theme="dark"]{
     --bg:#0a1310; --surface:#0f1a16; --surface-2:#14211c; --surface-3:#1a2924;
@@ -53,6 +65,12 @@
     --accent:#25d38a; --accent-deep:#1fb877; --accent-ink:#8fe9c4; --accent-soft:#123026;
     --danger:#ff6b5e; --danger-soft:#2a1512; --warn:#e0a24a; --warn-soft:#2a2010; --ok:#38d39a;
     --shadow-sm:0 1px 2px rgba(0,0,0,.4); --shadow-md:0 6px 22px rgba(0,0,0,.5); --shadow-lg:0 30px 70px rgba(0,0,0,.65);
+    /* WhatsApp ESCURO forçado */
+    --wa:#00a884; --wa2:#00a884; --wa-head:#1f2c34; --wa-body:#0b141a; --wa-chat:#0b141a;
+    --wa-ink:#e9edef; --wa-ink2:#c8d0d4; --wa-mut:#8696a0;
+    --wa-inp:#2a3942; --wa-inp-focus:#233138; --wa-line:#2b3940; --wa-box:#8696a0;
+    --wa-link:#53bdeb; --wa-tap:#182229; --wa-tap-active:#202c33; --wa-err:#f2637a; --wa-err-bg:#3a1f22;
+    --wa-sheet:#233138; --wa-sheet-2:#1d282e; --wa-scrim:rgba(0,0,0,.6);
   }
 
   *{box-sizing:border-box;}
@@ -95,7 +113,7 @@
   .btn:disabled{opacity:.4;pointer-events:none;}
   .btn.sm{height:30px;padding:0 10px;font-size:12px;}
 
-  .main{display:grid;grid-template-columns:266px minmax(0,1fr) 340px;min-height:0;overflow:hidden;}
+  .main{display:grid;grid-template-columns:clamp(224px,17vw,300px) minmax(0,1fr) clamp(300px,22vw,420px);min-height:0;overflow:hidden;}
 
   /* ---------- Palette ---------- */
   .palette{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:14px 12px 40px;}
@@ -139,15 +157,15 @@
     box-shadow:var(--shadow-lg),0 0 0 2px rgba(0,0,0,.35);position:relative;}
   .phone::after{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);
     width:120px;height:26px;background:#0b0f0e;border-radius:0 0 16px 16px;z-index:5;}
-  .phone-screen{border-radius:32px;overflow:hidden;background:var(--wa-body);height:720px;display:flex;flex-direction:column;}
-  .wa-head{background:var(--wa);color:#fff;padding:34px 12px 12px;display:flex;align-items:center;gap:12px;flex:none;}
+  .phone-screen{border-radius:32px;overflow:hidden;background:var(--wa-body);height:720px;display:flex;flex-direction:column;position:relative;}
+  .wa-head{background:var(--wa-head);color:#fff;padding:34px 12px 12px;display:flex;align-items:center;gap:12px;flex:none;}
   .wa-head .wa-back{opacity:.95;}
   .wa-head .wa-title{flex:1;min-width:0;}
   .wa-head .wa-title b{display:block;font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .wa-head .wa-title span{display:block;font-size:11px;opacity:.85;}
   .wa-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 15px 22px;background:var(--wa-body);color:var(--wa-ink);}
   .wa-body::-webkit-scrollbar{width:6px;}
-  .wa-body::-webkit-scrollbar-thumb{background:#d3dbd7;}
+  .wa-body::-webkit-scrollbar-thumb{background:var(--wa-line);border-radius:10px;}
   .term-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;
     background:rgba(255,255,255,.2);padding:3px 8px;border-radius:20px;letter-spacing:.3px;}
 
@@ -155,7 +173,7 @@
   .dropzone{min-height:16px;display:flex;flex-direction:column;gap:11px;}
   .dropzone.root{min-height:100%;gap:12px;}
   .dz-empty{border:2px dashed var(--wa-line);border-radius:12px;padding:26px 14px;text-align:center;
-    color:var(--wa-mut);font-size:12.5px;background:#fbfdfc;}
+    color:var(--wa-mut);font-size:12.5px;background:transparent;}
   .dz-empty.small{padding:14px;font-size:11.5px;}
   .cnode{position:relative;border-radius:11px;transition:box-shadow .12s;cursor:pointer;}
   .cnode>.cnode-tools{position:absolute;top:-11px;right:6px;display:none;gap:2px;z-index:6;
@@ -165,17 +183,19 @@
   .cnode-tools button:hover{background:var(--surface-2);color:var(--text);}
   .cnode-tools button.del:hover{background:var(--danger-soft);color:var(--danger);}
   .cnode-tools .grip{cursor:grab;}
-  .cnode-inner{border-radius:10px;outline:2px solid transparent;outline-offset:2px;transition:.12s;}
+  /* Seleção: apenas contorno + anel — nunca preenche/esconde o conteúdo */
+  .cnode-inner{border-radius:10px;outline:2px solid transparent;outline-offset:2px;transition:outline-color .12s, box-shadow .12s;}
   .cnode:hover>.cnode-inner{outline-color:var(--wa-line);}
-  .cnode.sel>.cnode-inner{outline-color:var(--accent);}
+  .cnode.sel>.cnode-inner{outline:2px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
   .cnode.dragging{opacity:.4;}
   .placeholder{height:3px;border-radius:3px;background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);margin:2px 0;}
 
-  /* WA component visuals */
+  /* WA component visuals — todo texto quebra linha e cresce com o conteúdo */
+  .wa-h1,.wa-h2,.wa-body-t,.wa-cap,.wa-label,.wa-rich{overflow-wrap:anywhere;word-break:break-word;max-width:100%;}
   .wa-h1{font-size:21px;font-weight:700;line-height:1.25;color:var(--wa-ink);margin:2px 0;}
   .wa-h2{font-size:16px;font-weight:600;color:var(--wa-ink);}
-  .wa-body-t{font-size:14px;color:#3b4a54;line-height:1.5;}
-  .wa-cap{font-size:12px;color:var(--wa-mut);line-height:1.45;}
+  .wa-body-t{font-size:14px;color:var(--wa-ink2);line-height:1.5;white-space:pre-wrap;}
+  .wa-cap{font-size:12px;color:var(--wa-mut);line-height:1.45;white-space:pre-wrap;}
   .wa-strike{text-decoration:line-through;}
   .wa-label{font-size:13px;font-weight:600;color:var(--wa-ink);margin-bottom:6px;display:block;}
   .wa-help{font-size:11.5px;color:var(--wa-mut);margin-top:5px;}
@@ -183,7 +203,7 @@
     color:var(--wa-mut);font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .wa-field.area{min-height:64px;align-items:flex-start;}
   .wa-opt{display:flex;align-items:center;gap:11px;padding:9px 2px;}
-  .wa-opt .box{width:20px;height:20px;border:2px solid #c4cdc8;border-radius:6px;flex:none;}
+  .wa-opt .box{width:20px;height:20px;border:2px solid var(--wa-box);border-radius:6px;flex:none;}
   .wa-opt .box.round{border-radius:50%;}
   .wa-opt .box.on{border-color:var(--wa);background:var(--wa);}
   .wa-opt .t b{display:block;font-size:14px;color:var(--wa-ink);font-weight:500;}
@@ -193,15 +213,16 @@
   .wa-cta{background:var(--wa);color:#fff;text-align:center;font-weight:600;font-size:15px;
     padding:13px;border-radius:24px;box-shadow:0 3px 10px rgba(0,128,105,.25);}
   .wa-cta.small{padding:11px;font-size:14px;}
-  .wa-link{color:#027eb5;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:5px;}
+  .wa-link{color:var(--wa-link);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:5px;overflow-wrap:anywhere;}
   .wa-img{width:100%;border-radius:12px;background:var(--wa-inp);display:grid;place-items:center;
     color:var(--wa-mut);overflow:hidden;min-height:120px;}
   .wa-img img{width:100%;display:block;object-fit:cover;}
   .wa-rich h1{font-size:20px;font-weight:700;margin:6px 0 4px;}
   .wa-rich h2{font-size:15px;font-weight:600;margin:6px 0 3px;}
-  .wa-rich p{font-size:13.5px;color:#3b4a54;margin:5px 0;line-height:1.5;}
-  .wa-rich ul,.wa-rich ol{margin:5px 0;padding-left:20px;font-size:13.5px;color:#3b4a54;}
-  .wa-rich a{color:#027eb5;}
+  .wa-rich p{font-size:13.5px;color:var(--wa-ink2);margin:5px 0;line-height:1.5;}
+  .wa-rich ul,.wa-rich ol{margin:5px 0;padding-left:20px;font-size:13.5px;color:var(--wa-ink2);}
+  .wa-rich h1,.wa-rich h2{color:var(--wa-ink);}
+  .wa-rich a{color:var(--wa-link);}
 
   /* logic nodes */
   .logic{border-radius:12px;border:1.5px solid #d9c9f7;background:linear-gradient(180deg,#faf7ff,#f4eeff);
@@ -214,6 +235,21 @@
     display:flex;align-items:center;gap:6px;}
   .branch-lbl .pill{background:#ede4ff;padding:1px 7px;border-radius:12px;}
   .branch .dropzone{background:rgba(255,255,255,.7);border-radius:9px;padding:8px;border:1px dashed #dccdf7;}
+  /* nós lógicos — variante escura (acompanha o tema) */
+  @media (prefers-color-scheme: dark){
+    .logic{border-color:#3a2d5c;background:linear-gradient(180deg,#1e1830,#191426);color:#cdbdf5;}
+    .logic-hd{color:#b79bf5;}
+    .logic-hd .cond{background:#241a3a;border-color:#3a2d5c;color:#d3c4f7;}
+    .branch-lbl{color:#b79bf5;} .branch-lbl .pill{background:#2a2040;}
+    .branch .dropzone{background:rgba(255,255,255,.04);border-color:#3a2d5c;}
+  }
+  :root[data-theme="dark"] .logic{border-color:#3a2d5c;background:linear-gradient(180deg,#1e1830,#191426);color:#cdbdf5;}
+  :root[data-theme="dark"] .logic-hd{color:#b79bf5;}
+  :root[data-theme="dark"] .logic-hd .cond{background:#241a3a;border-color:#3a2d5c;color:#d3c4f7;}
+  :root[data-theme="dark"] .branch-lbl{color:#b79bf5;}
+  :root[data-theme="dark"] .branch-lbl .pill{background:#2a2040;}
+  :root[data-theme="dark"] .branch .dropzone{background:rgba(255,255,255,.04);border-color:#3a2d5c;}
+  :root[data-theme="light"] .logic{border-color:#d9c9f7;background:linear-gradient(180deg,#faf7ff,#f4eeff);color:#4a2c85;}
 
   /* ---------- Inspector ---------- */
   .inspector{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
@@ -230,7 +266,7 @@
   .inp,.sel,.ta{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);
     padding:9px 10px;color:var(--text);transition:.12s;}
   .inp:focus,.sel:focus,.ta:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);background:var(--surface);}
-  .ta{resize:vertical;min-height:64px;line-height:1.45;}
+  .ta{resize:vertical;min-height:64px;max-height:340px;line-height:1.45;overflow-wrap:anywhere;}
   .ta.mono{font-family:var(--mono);font-size:12px;}
   .cnt{font-size:10.5px;color:var(--text-3);text-align:right;margin-top:3px;font-variant-numeric:tabular-nums;}
   .cnt.over{color:var(--danger);font-weight:600;}
@@ -334,8 +370,34 @@
   .toast .ti{color:var(--accent-bright);}
   @keyframes tin{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
 
-  @media (max-width:1080px){
-    .main{grid-template-columns:230px minmax(0,1fr) 300px;}
+  /* ---------- Responsividade desktop (notebooks → 4K / UltraWide) ---------- */
+  .blabel{display:inline;}
+  /* Notebooks compactos: colapsa rótulos dos botões e enxuga a topbar */
+  @media (max-width:1360px){
+    .topbar{gap:10px;padding:0 12px;}
+    .btn{padding:0 11px;}
+    #btnMap .blabel,#btnValidate .blabel,#btnImport .blabel{display:none;}
+    #btnMap,#btnValidate,#btnImport{width:36px;padding:0;justify-content:center;}
+  }
+  @media (max-width:1180px){
+    .main{grid-template-columns:clamp(206px,20vw,240px) minmax(0,1fr) clamp(280px,26vw,320px);}
+    .ver-wrap>span{display:none;}
+    #btnExport .blabel{display:none;} #btnExport{width:36px;padding:0;justify-content:center;}
+  }
+  @media (max-width:980px){
+    .main{grid-template-columns:190px minmax(0,1fr) 270px;}
+    .canvas-scroll{padding:18px 12px 80px;}
+  }
+  /* Telas muito baixas (notebooks 768p): reduz respiros verticais */
+  @media (max-height:760px){
+    .phone-screen{height:640px;}
+    .canvas-scroll{padding-top:18px;padding-bottom:60px;}
+  }
+  /* Monitores grandes (QHD/4K/UltraWide): painéis mais folgados */
+  @media (min-width:2200px){
+    body{font-size:15px;}
+    .main{grid-template-columns:340px minmax(0,1fr) 460px;}
+    .canvas-scroll{padding:56px 20px 120px;}
   }
 
   /* ---------- Modo Dev / UX ---------- */
@@ -372,22 +434,22 @@
     padding:12px 13px;font-size:14px;color:var(--wa-ink);font-family:var(--font);outline:none;cursor:text;
     transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;}
   .wa-inp-real::placeholder{color:var(--wa-mut);}
-  .wa-inp-real:focus{border-color:var(--wa2);background:#fff;box-shadow:0 0 0 3px rgba(0,168,132,.14);}
+  .wa-inp-real:focus{border-color:var(--wa2);background:var(--wa-inp-focus);box-shadow:0 0 0 3px rgba(0,168,132,.14);}
   .wa-inp-real:disabled{opacity:.55;cursor:not-allowed;}
-  textarea.wa-inp-real{min-height:76px;resize:vertical;line-height:1.45;}
+  textarea.wa-inp-real{min-height:76px;max-height:280px;resize:vertical;line-height:1.45;overflow-wrap:anywhere;}
   select.wa-inp-real{cursor:pointer;appearance:none;-webkit-appearance:none;padding-right:36px;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23667781' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 12px center;}
   input[type="date"].wa-inp-real{cursor:pointer;}
   .row2g{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .wa-err{display:flex;align-items:center;gap:5px;color:#d92d20;font-size:11.5px;font-weight:600;margin-top:6px;}
-  .perr .wa-inp-real{border-color:#d92d20 !important;background:#fdecea;}
+  .wa-err{display:flex;align-items:center;gap:5px;color:var(--wa-err);font-size:11.5px;font-weight:600;margin-top:6px;}
+  .perr .wa-inp-real{border-color:var(--wa-err) !important;background:var(--wa-err-bg);}
   .perr{animation:pshake .38s cubic-bezier(.36,.07,.19,.97);}
   @keyframes pshake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(2px)}30%,50%,70%{transform:translateX(-3px)}40%,60%{transform:translateX(3px)}}
   body.playing .wa-opt.tap{cursor:pointer;border-radius:9px;margin:0 -6px;padding:9px 8px;
     transition:background .13s ease, transform .1s ease;}
-  body.playing .wa-opt.tap:hover{background:#f5f7f6;}
-  body.playing .wa-opt.tap:active{background:#edf1ef;transform:scale(.99);}
+  body.playing .wa-opt.tap:hover{background:var(--wa-tap);}
+  body.playing .wa-opt.tap:active{background:var(--wa-tap-active);transform:scale(.99);}
   body.playing .box{display:grid;place-items:center;transition:background .16s ease, border-color .16s ease;}
   .box .ck{color:#fff;display:grid;place-items:center;animation:ckpop .2s cubic-bezier(.5,1.7,.6,1);}
   .box .dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:ckpop .2s cubic-bezier(.5,1.7,.6,1);}
@@ -395,6 +457,56 @@
   body.playing .wa-cta{cursor:pointer;transition:transform .12s ease, filter .12s ease, box-shadow .12s ease;}
   body.playing .wa-cta:hover{filter:brightness(1.06);box-shadow:0 5px 16px rgba(0,128,105,.34);}
   body.playing .wa-cta:active{transform:scale(.97);}
+  /* Campos que abrem uma sobreposição (lista suspensa / calendário) */
+  .wa-tapfield{cursor:pointer;transition:background .13s ease, border-color .13s ease;}
+  .wa-tapfield:hover{background:var(--wa-tap-active);}
+  .wa-tapfield .val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--wa-ink);min-width:0;}
+  .wa-tapfield .val.ph{color:var(--wa-mut);}
+  .wa-tapfield .ic{color:var(--wa-mut);flex:none;}
+
+  /* ---------- Sobreposição estilo WhatsApp (bottom sheet / calendário) ---------- */
+  .wa-overlay{position:absolute;inset:0;z-index:40;display:none;}
+  .wa-overlay.open{display:block;}
+  .wa-scrim{position:absolute;inset:0;background:var(--wa-scrim);animation:waFade .2s ease;}
+  .wa-sheet{position:absolute;left:0;right:0;bottom:0;max-height:86%;display:flex;flex-direction:column;
+    background:var(--wa-sheet);color:var(--wa-ink);border-radius:18px 18px 0 0;
+    box-shadow:0 -10px 34px rgba(0,0,0,.32);animation:waSheetUp .28s cubic-bezier(.22,.9,.36,1);}
+  .wa-sheet-hd{display:flex;align-items:center;gap:10px;padding:15px 16px 12px;border-bottom:1px solid var(--wa-line);}
+  .wa-sheet-hd b{flex:1;font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .wa-sheet-close{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--wa-mut);flex:none;}
+  .wa-sheet-close:hover{background:var(--wa-tap);color:var(--wa-ink);}
+  .wa-sheet-list{overflow-y:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch;}
+  .wa-sheet-opt{display:flex;align-items:center;gap:13px;padding:13px 18px;cursor:pointer;transition:background .12s ease;}
+  .wa-sheet-opt:hover{background:var(--wa-tap);}
+  .wa-sheet-opt:active{background:var(--wa-tap-active);}
+  .wa-sheet-opt .radio{width:21px;height:21px;border-radius:50%;border:2px solid var(--wa-box);flex:none;display:grid;place-items:center;transition:border-color .12s ease;}
+  .wa-sheet-opt.on .radio{border-color:var(--wa);}
+  .wa-sheet-opt.on .radio::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--wa);animation:ckpop .2s cubic-bezier(.5,1.7,.6,1);}
+  .wa-sheet-opt .ot{min-width:0;}
+  .wa-sheet-opt .ot b{display:block;font-size:14.5px;font-weight:500;color:var(--wa-ink);overflow-wrap:anywhere;}
+  .wa-sheet-opt .ot span{display:block;font-size:12px;color:var(--wa-mut);overflow-wrap:anywhere;}
+  .wa-sheet-opt.disabled{opacity:.4;pointer-events:none;}
+  /* calendário */
+  .wa-cal{padding:12px 14px 16px;}
+  .wa-cal-nav{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 10px;}
+  .wa-cal-nav b{font-size:15px;font-weight:600;text-transform:capitalize;}
+  .wa-cal-nav button{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--wa-ink);transition:background .12s;}
+  .wa-cal-nav button:hover{background:var(--wa-tap);}
+  .wa-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .wa-cal-dow{text-align:center;font-size:11px;font-weight:700;color:var(--wa-mut);padding:4px 0 8px;text-transform:uppercase;}
+  .wa-cal-day{position:relative;aspect-ratio:1/1;border-radius:50%;display:grid;place-items:center;font-size:13.5px;
+    color:var(--wa-ink);cursor:pointer;transition:background .1s ease;}
+  .wa-cal-day:hover{background:var(--wa-tap);}
+  .wa-cal-day.blank{pointer-events:none;}
+  .wa-cal-day.today{font-weight:700;box-shadow:inset 0 0 0 1.5px var(--wa2);}
+  .wa-cal-day.on{background:var(--wa);color:#fff;font-weight:700;}
+  .wa-cal-day.range{background:var(--accent-soft);border-radius:0;}
+  .wa-cal-day.disabled{opacity:.28;pointer-events:none;}
+  .wa-cal-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 4px 2px;margin-top:6px;border-top:1px solid var(--wa-line);}
+  .wa-cal-foot .hint{font-size:11.5px;color:var(--wa-mut);}
+  @keyframes waFade{from{opacity:0}to{opacity:1}}
+  @keyframes waSheetUp{from{transform:translateY(100%)}to{transform:none}}
+  @media (prefers-reduced-motion: reduce){.wa-scrim,.wa-sheet{animation:none !important;}}
 
   /* ---------- Testar: animações de tela e entrada ---------- */
   .play-wrap{display:flex;flex-direction:column;gap:12px;min-height:100%;}
@@ -449,10 +561,10 @@
     <button class="btn icon" id="btnUndo" title="Desfazer (Ctrl+Z)"></button>
     <button class="btn icon" id="btnRedo" title="Refazer (Ctrl+Y)"></button>
     <div class="top-sep"></div>
-    <button class="btn" id="btnMap"><span id="icMap"></span>Mapa de fluxo</button>
-    <button class="btn" id="btnValidate"><span id="icVal"></span>Validar</button>
-    <button class="btn" id="btnImport"><span id="icImp"></span>Importar</button>
-    <button class="btn primary" id="btnExport"><span id="icExp"></span>Exportar JSON</button>
+    <button class="btn" id="btnMap" title="Mapa de fluxo"><span id="icMap"></span><span class="blabel">Mapa de fluxo</span></button>
+    <button class="btn" id="btnValidate" title="Validar"><span id="icVal"></span><span class="blabel">Validar</span></button>
+    <button class="btn" id="btnImport" title="Importar"><span id="icImp"></span><span class="blabel">Importar</span></button>
+    <button class="btn primary" id="btnExport" title="Exportar JSON"><span id="icExp"></span><span class="blabel">Exportar JSON</span></button>
     <button class="btn icon ghost" id="btnTheme" title="Alternar tema"></button>
   </header>
 
@@ -470,6 +582,7 @@
               <span id="waDots"></span>
             </div>
             <div class="wa-body" id="canvasRoot"></div>
+            <div class="wa-overlay" id="waOverlay"></div>
           </div>
         </div>
       </div>
@@ -609,7 +722,7 @@ const COMPONENTS = {
     defaults:{text:['# Título','Parágrafo com **negrito** e *itálico*.','- Item 1','- Item 2'], visible:true},
     preview:n=>'<div class="wa-rich">'+renderRich(n.props.text)+'</div>'},
 
-  TextInput:{label:'Campo de texto', icon:'input', cat:'input', desc:'Entrada de uma linha',
+  TextInput:{label:'Resposta Curta', icon:'input', cat:'input', desc:'Entrada de uma linha',
     fields:[F_NAME,{key:'label',label:'Rótulo (label)',type:'text',req:true,max:20},
       {key:'input-type',label:'Tipo de entrada',type:'select',opts:['text','number','email','password','passcode','phone'],def:'text'},
       F_REQ, F_HELP,{key:'min-chars',label:'Mín. caracteres',type:'number'},{key:'max-chars',label:'Máx. caracteres',type:'number'},
@@ -618,7 +731,7 @@ const COMPONENTS = {
     preview:n=>'<label class="wa-label">'+esc(n.props.label||'Rótulo')+(n.props.required?' *':'')+'</label>'+
       '<div class="wa-field">'+esc(n.props['helper-text']||({email:'exemplo@email.com',phone:'+55 (11) 90000-0000',number:'0',password:'••••••••',passcode:'0000'})[n.props['input-type']]||'Digite aqui…')+'</div>'+
       (n.props['helper-text']?'<div class="wa-help">'+esc(n.props['helper-text'])+'</div>':'')},
-  TextArea:{label:'Área de texto', icon:'textarea', cat:'input', desc:'Entrada de várias linhas',
+  TextArea:{label:'Parágrafo', icon:'textarea', cat:'input', desc:'Texto com várias linhas',
     fields:[F_NAME,{key:'label',label:'Rótulo (label)',type:'text',req:true,max:20},F_REQ,
       {key:'max-length',label:'Máx. de caracteres',type:'number'},F_HELP,
       {key:'enabled',label:'Habilitado',type:'boolean',def:true}, F_VIS],
@@ -762,7 +875,7 @@ function buildSeed(){
 }
 
 const state = { flow:buildSeed(), currentId:null, sel:{kind:'screen'}, mode:'dev', play:false, navStack:[], done:false,
-  playData:{}, playErr:{}, navDir:'fwd', animScreen:false, playSig:'', justAdded:null };
+  playData:{}, playErr:{}, navDir:'fwd', animScreen:false, playSig:'', justAdded:null, sheet:null };
 state.currentId = state.flow.screens[0]._id;
 
 /* ---------- Modo Dev / UX ---------- */
@@ -902,15 +1015,26 @@ function renderCanvas(){
       inner=list.length ? list.map(renderNode).join('') : '<div class="dz-empty">Esta tela está vazia.</div>';
     }
     root.innerHTML='<div class="play-wrap'+(anim?(' anim'+dir):'')+'">'+inner+'</div>';
+    autoGrowIn(root); renderSheet();
     return;
   }
   root.innerHTML = renderContainer(sc.children,'s|'+sc._id,true);
   state.justAdded=null;
+  renderSheet();
 }
 function updateTopbar(){
   $('#btnUndo').disabled=!undoStack.length; $('#btnRedo').disabled=!redoStack.length;
   $('#verSel').value=state.flow.version;
 }
+/* Auto-crescimento vertical de áreas de texto (edição e teste) — sem corte */
+function autoGrow(el){ if(!el||el.tagName!=='TEXTAREA') return;
+  el.style.height='auto';
+  const max=parseFloat(getComputedStyle(el).maxHeight)||1e5;
+  const h=Math.min(el.scrollHeight+2, max);
+  el.style.height=h+'px';
+  el.style.overflowY=(el.scrollHeight>max)?'auto':'hidden';
+}
+function autoGrowIn(container){ if(!container) return; $$('textarea',container).forEach(autoGrow); }
 function render(){ updateTopbar(); renderTabs(); renderCanvas(); renderInspector(); }
 
 /* ============================ MODO DEV / UX + TESTAR ============================ */
@@ -934,14 +1058,14 @@ function setMode(m){ if(m!=='ux'&&m!=='dev') return; state.mode=m; if(m!=='ux') 
   document.body.classList.toggle('mode-ux',isUX());
   document.body.classList.toggle('playing',isPlaying());
   updateModeBtns(); renderUxBar(); renderPalette(); render(); }
-function setPlay(p){ if(!isUX()) return; state.play=!!p;
+function setPlay(p){ if(!isUX()) return; state.play=!!p; state.sheet=null;
   if(state.play){ state.navStack=[]; state.done=false; state.playData={}; state.playErr={};
     state.navDir='fwd'; state.animScreen=true; state.currentId=state.flow.screens[0]._id; state.sel={kind:'screen'}; }
   document.body.classList.toggle('playing',isPlaying()); renderUxBar(); render(); }
-function playRestart(){ state.navStack=[]; state.done=false; state.playData={}; state.playErr={};
+function playRestart(){ state.navStack=[]; state.done=false; state.playData={}; state.playErr={}; state.sheet=null;
   state.navDir='fwd'; state.animScreen=true; state.currentId=state.flow.screens[0]._id; renderUxBar(); render(); }
 function playBack(){ if(!state.navStack.length) return; state.currentId=state.navStack.pop(); state.done=false;
-  state.playErr={}; state.navDir='back'; state.animScreen=true; renderUxBar(); render(); }
+  state.playErr={}; state.sheet=null; state.navDir='back'; state.animScreen=true; renderUxBar(); render(); }
 
 /* ---- Simulação dinâmica: respostas do usuário, condições e campos interativos ---- */
 function buildFormMap(){ const m={};
@@ -1015,18 +1139,22 @@ function playPreview(node){
     return lab+'<textarea class="wa-inp-real area" data-pinput="'+nid+'" maxlength="'+(+p['max-length']||600)+'" placeholder="Escreva sua mensagem…"'+dis+'>'+esc(v)+'</textarea>'+help+errH;
   }
   if(node.type==='DatePicker'){
-    const v=state.playData[nid]||''; const dv=x=>/^\d{4}-\d{2}-\d{2}$/.test(x||'');
-    return lab+'<input type="date" class="wa-inp-real" data-pinput="'+nid+'"'+(dv(p['min-date'])?' min="'+p['min-date']+'"':'')+(dv(p['max-date'])?' max="'+p['max-date']+'"':'')+dis+' value="'+esc(v)+'">'+help+errH;
+    const v=state.playData[nid]||''; const shown=v?fmtBR(v):'';
+    const off=p.enabled===false?' style="opacity:.55;pointer-events:none"':'';
+    return lab+'<div class="wa-field wa-tapfield" data-pcalendar="'+nid+'"'+off+'><span class="val'+(shown?'':' ph')+'">'+esc(shown||'DD / MM / AAAA')+'</span>'+icon('date',18)+'</div>'+help+errH;
   }
   if(node.type==='CalendarPicker'){
-    const v=state.playData[nid]||{};
-    if(p.mode==='range') return lab+'<div class="row2g"><input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="start" value="'+esc(v.start||'')+'"><input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="end" value="'+esc(v.end||'')+'"></div>'+help+errH;
-    return lab+'<input type="date" class="wa-inp-real" data-pinput="'+nid+'" data-pfield="start" value="'+esc(v.start||'')+'">'+help+errH;
+    const v=state.playData[nid]||{}; let shown='';
+    if(p.mode==='range') shown=(v.start||v.end)?((v.start?fmtBR(v.start):'…')+' – '+(v.end?fmtBR(v.end):'…')):'';
+    else shown=v.start?fmtBR(v.start):'';
+    const ph=p.mode==='range'?'Início – Fim':'Selecionar data';
+    return lab+'<div class="wa-field wa-tapfield" data-pcalendar="'+nid+'"><span class="val'+(shown?'':' ph')+'">'+esc(shown||ph)+'</span>'+icon('calendar',18)+'</div>'+help+errH;
   }
   if(node.type==='Dropdown'){
     const v=state.playData[nid]||''; const ds=p['data-source']||[];
-    return lab+'<select class="wa-inp-real" data-pselect="'+nid+'"'+dis+'><option value="">Selecione…</option>'+
-      ds.map(o=>'<option value="'+esc(o.id)+'"'+(v===o.id?' selected':'')+(o.enabled===false?' disabled':'')+'>'+esc(o.title||'')+'</option>').join('')+'</select>'+errH;
+    const sel=ds.find(o=>o.id===v); const shown=sel?(sel.title||''):'';
+    const off=p.enabled===false?' style="opacity:.55;pointer-events:none"':'';
+    return lab+'<div class="wa-field wa-tapfield" data-pdropdown="'+nid+'"'+off+'><span class="val'+(shown?'':' ph')+'">'+esc(shown||'Selecione…')+'</span>'+icon('dropdown',18)+'</div>'+errH;
   }
   if(node.type==='CheckboxGroup'||node.type==='RadioButtonsGroup'){
     const radio=node.type==='RadioButtonsGroup'; const ds=p['data-source']||[]; const val=state.playData[nid];
@@ -1067,6 +1195,8 @@ function handlePlayClick(e){
   if(rd){ state.playData[rd.dataset.pradio]=rd.dataset.opt; delete state.playErr[rd.dataset.pradio]; renderCanvas(); return; }
   const op=t.closest('[data-poptin]');
   if(op){ const nid=op.dataset.poptin; state.playData[nid]=!state.playData[nid]; delete state.playErr[nid]; renderCanvas(); return; }
+  const dd=t.closest('[data-pdropdown]'); if(dd){ openSheet('dropdown', dd.dataset.pdropdown); return; }
+  const cal=t.closest('[data-pcalendar]'); if(cal){ openSheet('calendar', cal.dataset.pcalendar); return; }
   const nd=t.closest('[data-playnav]'); if(!nd) return;
   const node=findNode(nd.dataset.node); if(!node) return;
   let a=node.props['on-click-action']; if(!a||!a.name||a.name==='none') a=node.props['on-select-action'];
@@ -1078,6 +1208,7 @@ function handlePlayClick(e){
   doPlayAction(a);
 }
 function doPlayAction(a){
+  state.sheet=null;
   if(a.name==='navigate'){ const s=state.flow.screens.find(x=>x.id===a.next);
     if(s){ state.navStack.push(state.currentId); state.currentId=s._id; state.done=false; state.playErr={};
       state.navDir='fwd'; state.animScreen=true; renderUxBar(); render(); }
@@ -1085,6 +1216,91 @@ function doPlayAction(a){
   else if(a.name==='complete'){ state.done=true; state.playErr={}; state.navDir='fwd'; state.animScreen=true; renderUxBar(); render(); }
   else if(a.name==='open_url'){ toast('Abriria o link: '+(a.url||'(sem URL)')); }
   else toast('Ação de dados — simulada no teste'); }
+
+/* ============================ SOBREPOSIÇÕES INTERATIVAS (lista suspensa / calendário) ============================ */
+const MONTHS_BR=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DOW_BR=['D','S','T','Q','Q','S','S']; // Dom Seg Ter Qua Qui Sex Sáb
+function pad2(n){ return (n<10?'0':'')+n; }
+function isoOf(y,m,d){ return y+'-'+pad2(m+1)+'-'+pad2(d); }
+function fmtBR(iso){ const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(iso||''); return m?(m[3]+'/'+m[2]+'/'+m[1]):(iso||''); }
+function parseISO(s){ return /^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:''; }
+function withinBounds(iso,min,max){ const mn=parseISO(min),mx=parseISO(max);
+  if(mn&&iso<mn) return false; if(mx&&iso>mx) return false; return true; }
+
+function openSheet(kind,nid){
+  const node=findNode(nid); if(!node) return; const p=node.props||{};
+  if(kind==='calendar'){
+    const cur=(node.type==='CalendarPicker'?((state.playData[nid]||{}).start):state.playData[nid])||'';
+    const base=parseISO(cur)?new Date(cur+'T00:00:00'):new Date();
+    state.sheet={kind:'calendar', nid, type:node.type, mode:p.mode||'single', y:base.getFullYear(), m:base.getMonth(), range:{}};
+    if(node.type==='CalendarPicker'&&p.mode==='range'){ const v=state.playData[nid]||{}; state.sheet.range={start:v.start||'', end:v.end||''}; }
+  } else { state.sheet={kind:'dropdown', nid}; }
+  renderSheet();
+}
+function closeSheet(){ if(!state.sheet) return; state.sheet=null; renderSheet(); }
+
+function renderSheet(){
+  const host=$('#waOverlay'); if(!host) return;
+  const s=state.sheet;
+  if(!s||!isPlaying()||state.done){ host.className='wa-overlay'; host.innerHTML=''; return; }
+  const node=findNode(s.nid); if(!node){ state.sheet=null; host.className='wa-overlay'; host.innerHTML=''; return; }
+  const p=node.props||{}; let body='';
+  if(s.kind==='dropdown'){
+    const ds=p['data-source']||[]; const cur=state.playData[s.nid]||'';
+    body='<div class="wa-sheet"><div class="wa-sheet-hd"><b>'+esc(p.label||'Selecione')+'</b>'+
+      '<button class="wa-sheet-close" data-sheetclose>'+icon('close',18)+'</button></div><div class="wa-sheet-list">'+
+      (ds.length?ds.map(o=>'<div class="wa-sheet-opt'+(cur===o.id?' on':'')+(o.enabled===false?' disabled':'')+'" data-sheetopt="'+esc(o.id)+'">'+
+        '<span class="radio"></span><span class="ot"><b>'+esc(o.title||'')+'</b>'+(o.description?'<span>'+esc(o.description)+'</span>':'')+'</span></div>').join('')
+        :'<div class="wa-sheet-opt disabled"><span class="ot"><b>Sem opções</b></span></div>')+'</div></div>';
+  } else {
+    body='<div class="wa-sheet"><div class="wa-sheet-hd"><b>'+esc(p.title||p.label||'Selecionar data')+'</b>'+
+      '<button class="wa-sheet-close" data-sheetclose>'+icon('close',18)+'</button></div><div class="wa-cal">'+renderCalBody(s,p)+'</div></div>';
+  }
+  host.className='wa-overlay open';
+  host.innerHTML='<div class="wa-scrim" data-sheetclose></div>'+body;
+}
+function renderCalBody(s,p){
+  const startDow=new Date(s.y,s.m,1).getDay();
+  const daysInMonth=new Date(s.y,s.m+1,0).getDate();
+  const now=new Date(); const todayIso=isoOf(now.getFullYear(),now.getMonth(),now.getDate());
+  const selStart=s.mode==='range'?s.range.start:(s.type==='CalendarPicker'?((state.playData[s.nid]||{}).start):state.playData[s.nid]);
+  const selEnd=s.mode==='range'?s.range.end:'';
+  let cells='';
+  for(let i=0;i<startDow;i++) cells+='<div class="wa-cal-day blank"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const iso=isoOf(s.y,s.m,d); let cls='wa-cal-day';
+    if(!withinBounds(iso,p['min-date'],p['max-date'])) cls+=' disabled';
+    if(iso===todayIso) cls+=' today';
+    if((selStart&&iso===selStart)||(selEnd&&iso===selEnd)) cls+=' on';
+    else if(s.mode==='range'&&selStart&&selEnd&&iso>selStart&&iso<selEnd) cls+=' range';
+    cells+='<div class="'+cls+'" data-calday="'+iso+'">'+d+'</div>';
+  }
+  const foot=s.mode==='range'?'<div class="wa-cal-foot"><span class="hint">'+
+    (s.range.start?('Início: '+fmtBR(s.range.start)+(s.range.end?' · Fim: '+fmtBR(s.range.end):' — escolha o fim')):'Toque na data inicial')+'</span></div>':'';
+  return '<div class="wa-cal-nav"><button data-calnav="-1" title="Mês anterior">'+icon('back',18)+'</button>'+
+    '<b>'+MONTHS_BR[s.m]+' '+s.y+'</b><button data-calnav="1" title="Próximo mês">'+icon('redo',18)+'</button></div>'+
+    '<div class="wa-cal-grid">'+DOW_BR.map(d=>'<div class="wa-cal-dow">'+d+'</div>').join('')+cells+'</div>'+foot;
+}
+function handleSheetClick(e){
+  const s=state.sheet; if(!s) return;
+  if(e.target.closest('[data-sheetclose]')){ closeSheet(); return; }
+  if(s.kind==='dropdown'){
+    const o=e.target.closest('[data-sheetopt]'); if(!o) return;
+    state.playData[s.nid]=o.dataset.sheetopt; delete state.playErr[s.nid]; state.sheet=null; renderCanvas(); return;
+  }
+  // calendário
+  const nav=e.target.closest('[data-calnav]');
+  if(nav){ let m=s.m+(+nav.dataset.calnav), y=s.y; if(m<0){m=11;y--;} if(m>11){m=0;y++;} s.m=m; s.y=y; renderSheet(); return; }
+  const day=e.target.closest('[data-calday]'); if(!day) return;
+  const iso=day.dataset.calday;
+  if(s.mode==='range'){
+    if(!s.range.start||s.range.end){ s.range={start:iso,end:''}; renderSheet(); return; } // (re)inicia
+    if(iso<s.range.start){ s.range={start:iso,end:''}; renderSheet(); return; }
+    state.playData[s.nid]={start:s.range.start,end:iso}; delete state.playErr[s.nid]; state.sheet=null; renderCanvas(); return;
+  }
+  if(s.type==='CalendarPicker') state.playData[s.nid]={start:iso}; else state.playData[s.nid]=iso;
+  delete state.playErr[s.nid]; state.sheet=null; renderCanvas();
+}
 
 /* ============================ INSPECTOR ============================ */
 function tgl(on){ return '<span class="tgl'+(on?' on':'')+'"></span>'; }
@@ -1257,10 +1473,11 @@ function renderInspector(){
   if(isPlaying()){ box.innerHTML=inspPlay(); return; }
   if(state.sel.kind==='component'){
     const node=findNode(state.sel.id);
-    if(node){ box.innerHTML=inspComponent(node); return; }
+    if(node){ box.innerHTML=inspComponent(node); autoGrowIn(box); return; }
     state.sel={kind:'screen'};
   }
   box.innerHTML=inspScreen(currentScreen());
+  autoGrowIn(box);
 }
 
 /* ============================ SERIALIZAÇÃO ============================ */
@@ -1444,7 +1661,8 @@ function initEvents(){
   $('#btnExport').onclick=openExport; $('#btnImport').onclick=openImport;
   $('#btnValidate').onclick=openValidate; $('#btnMap').onclick=openMap; $('#btnTheme').onclick=toggleTheme;
   $('#modeDev').onclick=()=>setMode('dev'); $('#modeUx').onclick=()=>setMode('ux');
-  $('#waBack').addEventListener('click',()=>{ if(isPlaying()) playBack(); });
+  $('#waBack').addEventListener('click',()=>{ if(state.sheet){ closeSheet(); return; } if(isPlaying()) playBack(); });
+  $('#waOverlay').addEventListener('click',handleSheetClick);
   $('#backdrop').addEventListener('click',e=>{ if(e.target===$('#backdrop')) closeModal(); });
   $('#modal').addEventListener('click',e=>{ if(e.target.closest('[data-close]')) closeModal(); });
 
@@ -1475,7 +1693,7 @@ function initEvents(){
   root.addEventListener('drop',e=>{ if(!dragKind) return; e.preventDefault(); e.stopPropagation(); doDrop(); });
 
   // Modo Testar: campos dinâmicos (digitação, seleção, reavaliação de ramificações)
-  root.addEventListener('input',e=>{ if(!isPlaying()) return; const el=e.target; const nid=el.dataset&&el.dataset.pinput; if(!nid) return;
+  root.addEventListener('input',e=>{ if(!isPlaying()) return; const el=e.target; if(el.tagName==='TEXTAREA') autoGrow(el); const nid=el.dataset&&el.dataset.pinput; if(!nid) return;
     if(el.dataset.pfield){ const o=Object.assign({},state.playData[nid]); o[el.dataset.pfield]=el.value; state.playData[nid]=o; }
     else state.playData[nid]=el.value;
     if(state.playErr[nid]){ delete state.playErr[nid]; const cn=el.closest('.cnode');
@@ -1489,7 +1707,7 @@ function initEvents(){
   const insp=$('#inspector');
   insp.addEventListener('focusin',e=>{ const t=e.target; if(t.tagName==='TEXTAREA'||(t.tagName==='INPUT'&&t.type!=='file')) armed=true; });
   insp.addEventListener('input',e=>{
-    const t=e.target; const node=(state.sel.kind==='component')?findNode(state.sel.id):null;
+    const t=e.target; if(t.tagName==='TEXTAREA') autoGrow(t); const node=(state.sel.kind==='component')?findNode(state.sel.id):null;
     if(t.dataset.f!==undefined){ if(t.tagName==='SELECT') return; if(!node) return; firstEditRecord(); setCompField(node,t); renderCanvas(); saveLocal(); return; }
     if(t.dataset.optf!==undefined && node){ firstEditRecord(); const key=t.closest('[data-optkey]').dataset.optkey; let val=t.value; if(t.maxLength>0 && val.length>t.maxLength) val=val.slice(0,t.maxLength); node.props[key][+t.dataset.optidx][t.dataset.optf]=val; renderCanvas(); saveLocal(); return; }
     if(t.dataset.payf!==undefined && node){ firstEditRecord(); const fk=t.closest('[data-actkey]').dataset.actkey; (node.props[fk].payload=node.props[fk].payload||[])[+t.dataset.payidx][t.dataset.payf]=t.value; saveLocal(); return; }
@@ -1542,7 +1760,7 @@ function insertCond(text){ const ta=$('#condTA'); if(!ta) return; const node=fin
   const s=ta.selectionStart, en=ta.selectionEnd, val=ta.value, nv=val.slice(0,s)+text+val.slice(en);
   recordUndo(); if(node) node.props.condition=nv; ta.value=nv; ta.focus(); ta.selectionStart=ta.selectionEnd=s+text.length; renderCanvas(); saveLocal(); }
 function onKey(e){
-  if(e.key==='Escape'){ closeModal(); return; }
+  if(e.key==='Escape'){ if(state.sheet){ closeSheet(); return; } closeModal(); return; }
   const mod=e.ctrlKey||e.metaKey;
   if(mod && e.key.toLowerCase()==='z' && !e.shiftKey){ e.preventDefault(); undo(); return; }
   if(mod && (e.key.toLowerCase()==='y'||(e.shiftKey&&e.key.toLowerCase()==='z'))){ e.preventDefault(); redo(); return; }
@@ -1637,6 +1855,3 @@ function toggleTheme(){ const root=document.documentElement; const cur=root.getA
   renderPalette(); render(); initEvents();
 })();
 </script>
-
-</body>
-</html>
