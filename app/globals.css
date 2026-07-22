@@ -115,10 +115,10 @@
   .btn:disabled{opacity:.4;pointer-events:none;}
   .btn.sm{height:30px;padding:0 10px;font-size:12px;}
 
-  .main{display:grid;grid-template-columns:clamp(224px,17vw,300px) minmax(0,1fr) clamp(300px,22vw,420px);min-height:0;overflow:hidden;}
+  .main{display:grid;grid-template-columns:clamp(224px,17vw,300px) minmax(0,1fr) clamp(300px,22vw,420px);height:100%;min-height:0;overflow:hidden;}
 
   /* ---------- Palette ---------- */
-  .palette{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:14px 12px 40px;}
+  .palette{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:14px 12px 40px;min-height:0;}
   .palette-hd{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-3);
     padding:14px 8px 7px;}
   .palette-hd:first-child{padding-top:2px;}
@@ -137,7 +137,7 @@
     background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--r-sm);padding:8px 10px;}
 
   /* ---------- Stage / phone ---------- */
-  .stage{display:flex;flex-direction:column;min-width:0;background:
+  .stage{display:flex;flex-direction:column;min-width:0;min-height:0;background:
      radial-gradient(circle at 22px 22px, var(--border) 1.3px, transparent 0) 0 0/24px 24px;}
   .tabs{display:flex;align-items:center;gap:6px;padding:10px 14px;overflow-x:auto;
     background:var(--surface);border-bottom:1px solid var(--border);min-height:52px;}
@@ -254,7 +254,7 @@
   :root[data-theme="light"] .logic{border-color:#d9c9f7;background:linear-gradient(180deg,#faf7ff,#f4eeff);color:#4a2c85;}
 
   /* ---------- Inspector ---------- */
-  .inspector{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
+  .inspector{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;min-height:0;}
   .insp-hd{padding:15px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:3;}
   .insp-hd .k{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-3);}
   .insp-hd .n{display:flex;align-items:center;gap:9px;margin-top:5px;}
